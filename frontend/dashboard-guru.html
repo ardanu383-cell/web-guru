@@ -1059,7 +1059,10 @@
             form.querySelectorAll('[name]').forEach(el => {
                 if (el.type === 'checkbox') {
                     data[el.name] = el.checked ? 'true' : 'false';
-                } else {
+                } else if (el.type === 'radio') {
+                    // Hanya ambil radio yang dipilih
+                    if (el.checked) data[el.name] = el.value;
+                } else if (el.type !== 'file') {
                     data[el.name] = el.value;
                 }
             });
