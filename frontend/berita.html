@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berita - GuruOnline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/custom.css">
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { primary: '#4f46e5', secondary: '#7c3aed' } } }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">G</span>
+                        </div>
+                        <span class="ml-2 text-xl font-bold text-gray-800">GuruOnline</span>
+                    </a>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="index.html" class="text-gray-500 hover:text-primary px-3 py-2 text-sm font-medium">Beranda</a>
+                        <a href="index.html#fitur" class="text-gray-500 hover:text-primary px-3 py-2 text-sm font-medium">Fitur</a>
+                        <a href="index.html#materi" class="text-gray-500 hover:text-primary px-3 py-2 text-sm font-medium">Materi</a>
+                        <a href="berita.html" class="text-primary border-b-2 border-primary px-3 py-2 text-sm font-medium">Berita</a>
+                    </div>
+                </div>
+                <div class="flex items-center" id="auth-links">
+                    <a href="login.html" class="text-gray-500 hover:text-primary px-3 py-2 text-sm font-medium">Login</a>
+                    <a href="register.html" class="ml-4 bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Daftar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="pt-24 pb-10 bg-gradient-to-br from-indigo-600 to-purple-700 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl font-bold text-white mb-3">Berita & Pengumuman</h1>
+            <p class="text-indigo-200">Informasi terbaru seputar kegiatan dan akademik</p>
+        </div>
+    </div>
+
+    <!-- Filter Kategori -->
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex flex-wrap gap-2" id="filterButtons">
+            <button onclick="filterBerita('semua')" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-indigo-600 text-white" data-kategori="semua">Semua</button>
+            <button onclick="filterBerita('umum')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border hover:bg-indigo-50" data-kategori="umum">Umum</button>
+            <button onclick="filterBerita('akademik')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border hover:bg-indigo-50" data-kategori="akademik">Akademik</button>
+            <button onclick="filterBerita('kegiatan')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border hover:bg-indigo-50" data-kategori="kegiatan">Kegiatan</button>
+            <button onclick="filterBerita('pengumuman')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border hover:bg-indigo-50" data-kategori="pengumuman">Pengumuman</button>
+        </div>
+    </div>
+
+    <!-- Berita List -->
+    <main class="max-w-7xl mx-auto px-4 pb-16">
+        <!-- Loading -->
+        <div id="loadingState" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="animate-pulse bg-white rounded-2xl shadow h-72"></div>
+            <div class="animate-pulse bg-white rounded-2xl shadow h-72"></div>
+            <div class="animate-pulse bg-white rounded-2xl shadow h-72"></div>
+        </div>
+
+        <!-- Berita Grid -->
+        <div id="beritaGrid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20">
+            <div class="text-6xl mb-4">📰</div>
+            <p class="text-gray-500 text-lg">Belum ada berita untuk kategori ini.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-8 px-4">
+        <div class="max-w-7xl mx-auto text-center text-gray-500 text-sm">
+            <p>© GuruOnline. Platform Pembelajaran Digital.</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const kategoriColors = {
+            umum: 'bg-gray-100 text-gray-700',
+            akademik: 'bg-blue-100 text-blue-700',
+            kegiatan: 'bg-yellow-100 text-yellow-700',
+            pengumuman: 'bg-red-100 text-red-700'
+        };
+
+        let allBerita = [];
+        let aktifKategori = 'semua';
+
+        async function loadBerita() {
+            try {
+                allBerita = await api.get('/berita');
+                renderBerita(allBerita);
+            } catch (e) {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('emptyState').classList.remove('hidden');
+            }
+        }
+
+        function renderBerita(data) {
+            document.getElementById('loadingState').classList.add('hidden');
+            const grid = document.getElementById('beritaGrid');
+            const empty = document.getElementById('emptyState');
+
+            if (data.length === 0) {
+                grid.classList.add('hidden');
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            grid.classList.remove('hidden');
+
+            grid.innerHTML = data.map((b, i) => {
+                const badge = kategoriColors[b.kategori] || 'bg-green-100 text-green-700';
+                const tanggal = new Date(b.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                // Strip HTML untuk preview
+                const tmp = document.createElement('div');
+                tmp.innerHTML = b.isi;
+                const preview = (tmp.textContent || tmp.innerText || '').substring(0, 120) + '...';
+
+                // Berita pertama tampil lebih besar
+                if (i === 0 && aktifKategori === 'semua') {
+                    return `
+                        <div class="md:col-span-2 lg:col-span-3 bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row card-hover">
+                            ${b.thumbnail_url
+                                ? `<img src="${b.thumbnail_url}" class="w-full md:w-1/2 h-64 md:h-auto object-cover">`
+                                : `<div class="w-full md:w-1/2 h-64 bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center text-5xl">📰</div>`}
+                            <div class="p-6 md:p-8 flex flex-col justify-center">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium ${badge}">${b.kategori}</span>
+                                    <span class="text-gray-400 text-xs">${tanggal}</span>
+                                </div>
+                                <h2 class="text-2xl font-bold text-gray-900 mb-3">${b.judul}</h2>
+                                <p class="text-gray-500 mb-4">${preview}</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-400">Oleh <strong>${b.guru_nama}</strong></span>
+                                    <a href="berita-detail.html?id=${b.id}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition">Baca Selengkapnya</a>
+                                </div>
+                            </div>
+                        </div>`;
+                }
+
+                return `
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden card-hover flex flex-col">
+                        ${b.thumbnail_url
+                            ? `<img src="${b.thumbnail_url}" class="w-full h-48 object-cover">`
+                            : `<div class="w-full h-48 bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center text-4xl">📰</div>`}
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium ${badge}">${b.kategori}</span>
+                                <span class="text-gray-400 text-xs">${tanggal}</span>
+                            </div>
+                            <h3 class="font-bold text-gray-900 text-lg mb-2 line-clamp-2">${b.judul}</h3>
+                            <p class="text-gray-500 text-sm flex-1 line-clamp-3">${preview}</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="text-xs text-gray-400">${b.guru_nama}</span>
+                                <a href="berita-detail.html?id=${b.id}" class="text-indigo-600 text-sm font-medium hover:underline">Baca →</a>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function filterBerita(kategori) {
+            aktifKategori = kategori;
+
+            // Update tombol aktif
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.kategori === kategori) {
+                    btn.className = 'filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-indigo-600 text-white';
+                } else {
+                    btn.className = 'filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border hover:bg-indigo-50';
+                }
+            });
+
+            const filtered = kategori === 'semua' ? allBerita : allBerita.filter(b => b.kategori === kategori);
+            renderBerita(filtered);
+        }
+
+        loadBerita();
+    </script>
+</body>
+</html>
