@@ -25,11 +25,23 @@ exports.getMenus = async (req, res) => {
     } catch (e) { res.status(500).json({ message: e.message }); }
 };
 
-// ── GET semua menu untuk admin ────────────────────────────────────
+// ── GET semua menu untuk admin (terstruktur hierarki) ────────────
 exports.getAllMenus = async (req, res) => {
     try {
-        const [menus] = await pool.query('SELECT * FROM menus ORDER BY parent_id ASC, urutan ASC');
-        res.json(menus);
+        const [all] = await pool.query('SELECT * FROM menus ORDER BY urutan ASC, id ASC');
+        // Susun hierarki: root → sub → subsub
+        const roots = all.filter(m => !m.parent_id);
+        const result = [];
+        for (const root of roots) {
+            result.push(root);
+            const subs = all.filter(m => m.parent_id === root.id);
+            for (const sub of subs) {
+                result.push(sub);
+                const subsubs = all.filter(m => m.parent_id === sub.id);
+                for (const ss of subsubs) result.push(ss);
+            }
+        }
+        res.json(result);
     } catch (e) { res.status(500).json({ message: e.message }); }
 };
 

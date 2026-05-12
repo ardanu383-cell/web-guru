@@ -1731,7 +1731,12 @@
                     ? '<tr><td colspan="7" class="px-6 py-8 text-center text-gray-400">Belum ada menu</td></tr>'
                     : allMenus.map((m, idx) => {
                         const parent = allMenus.find(p => p.id === m.parent_id);
-                        return `<tr class="hover:bg-gray-50">
+                        const grandParent = parent ? allMenus.find(p => p.id === parent.parent_id) : null;
+                        // Tentukan level indentasi
+                        const level = grandParent ? 2 : (parent ? 1 : 0);
+                        const indent = level === 2 ? '&nbsp;&nbsp;&nbsp;&nbsp;⤷ ' : (level === 1 ? '&nbsp;&nbsp;↳ ' : '');
+                        const rowBg = level === 2 ? 'bg-purple-50' : (level === 1 ? 'bg-indigo-50' : '');
+                        return `<tr class="hover:bg-gray-50 ${rowBg}">
                             <td class="px-3 py-3">
                                 <div class="flex flex-col gap-0.5">
                                     <button onclick="moveMenu(${m.id},'up')" ${idx===0?'disabled':''} class="w-6 h-6 flex items-center justify-center rounded hover:bg-indigo-100 text-gray-400 hover:text-indigo-600 disabled:opacity-20 disabled:cursor-not-allowed transition">
@@ -1742,7 +1747,7 @@
                                     </button>
                                 </div>
                             </td>
-                            <td class="px-4 py-3 font-medium text-gray-900">${m.parent_id ? '<span class="text-gray-400 mr-1 text-xs">↳</span>' : ''}${m.label}</td>
+                            <td class="px-4 py-3 font-medium text-gray-900">${indent}${m.label}</td>
                             <td class="px-4 py-3 text-gray-500 text-sm">${parent ? parent.label : '—'}</td>
                             <td class="px-4 py-3"><span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">${m.tipe}</span></td>
                             <td class="px-4 py-3 text-gray-500 text-xs font-mono">${m.link || '—'}</td>
@@ -1791,14 +1796,18 @@
             document.getElementById('menuAktif').checked = data ? !!data.aktif : true;
             toggleMenuTipe();
 
-            // Isi dropdown parent — semua menu bisa jadi parent (kecuali diri sendiri)
+            // Isi dropdown parent — semua menu bisa jadi parent (kecuali diri sendiri dan turunannya)
             const parentSel = document.getElementById('menuParent');
-            parentSel.innerHTML = '<option value="">— Menu Utama —</option>' +
-                allMenus.filter(m => m.id !== data?.id)
-                    .map(m => {
-                        const prefix = m.parent_id ? '&nbsp;&nbsp;↳ ' : '';
-                        return `<option value="${m.id}" ${data?.parent_id == m.id ? 'selected' : ''}>${prefix}${m.label}</option>`;
-                    }).join('');
+            parentSel.innerHTML = '<option value="">— Menu Utama (Level 1) —</option>' +
+                allMenus.filter(m => m.id !== data?.id).map(m => {
+                    const parent = allMenus.find(p => p.id === m.parent_id);
+                    const grandParent = parent ? allMenus.find(p => p.id === parent.parent_id) : null;
+                    // Batasi hanya sampai level 2 sebagai parent (agar max 3 level)
+                    if (grandParent) return ''; // level 3 tidak bisa jadi parent
+                    const prefix = parent ? '&nbsp;&nbsp;↳ ' : '';
+                    const levelLabel = parent ? ' (Sub-menu)' : ' (Menu Utama)';
+                    return `<option value="${m.id}" ${data?.parent_id == m.id ? 'selected' : ''}>${prefix}${m.label}${levelLabel}</option>`;
+                }).join('');
 
             // Isi dropdown halaman
             const pageSel = document.getElementById('menuPageId');
