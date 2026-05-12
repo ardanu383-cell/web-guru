@@ -457,36 +457,50 @@
                             ['color', ['color']],
                             ['para', ['ul', 'ol', 'paragraph']],
                             ['table', ['table']],
-                            ['insert', ['link', 'picture', 'hr']],
+                            ['insert', ['link', 'hr', 'uploadImage']],
                             ['view', ['fullscreen', 'codeview']]
                         ],
-                        callbacks: {
-                            onImageUpload: function(files) {
-                                Array.from(files).forEach(file => {
-                                    const formData = new FormData();
-                                    formData.append('file', file);
-                                    fetch('/api/upload/image', {
-                                        method: 'POST',
-                                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                                        body: formData
-                                    })
-                                    .then(r => r.json())
-                                    .then(data => {
-                                        if (data.url) {
-                                            $('#bIsi').summernote('insertImage', data.url);
-                                        } else {
-                                            alert('Gagal upload gambar');
-                                        }
-                                    })
-                                    .catch(() => alert('Gagal upload gambar'));
+                        buttons: {
+                            uploadImage: function(context) {
+                                const ui = $.summernote.ui;
+                                const btn = ui.button({
+                                    contents: '🖼 Gambar',
+                                    tooltip: 'Upload Gambar',
+                                    click: function() {
+                                        const input = document.createElement('input');
+                                        input.type = 'file';
+                                        input.accept = 'image/*';
+                                        input.onchange = function() {
+                                            const file = input.files[0];
+                                            if (!file) return;
+                                            const formData = new FormData();
+                                            formData.append('file', file);
+                                            fetch('/api/upload/image', {
+                                                method: 'POST',
+                                                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                                                body: formData
+                                            })
+                                            .then(r => r.json())
+                                            .then(data => {
+                                                if (data.url) {
+                                                    context.invoke('insertImage', data.url);
+                                                } else {
+                                                    alert('Gagal upload gambar');
+                                                }
+                                            })
+                                            .catch(() => alert('Gagal upload gambar'));
+                                        };
+                                        input.click();
+                                    }
                                 });
-                            },
+                                return btn.render();
+                            }
+                        },
+                        callbacks: {
                             onDialogShown: function() {
-                                // Sembunyikan overlay saat dialog summernote terbuka
                                 document.getElementById('beritaOverlay').style.display = 'none';
                             },
                             onDialogHidden: function() {
-                                // Tampilkan kembali overlay setelah dialog ditutup
                                 document.getElementById('beritaOverlay').style.display = '';
                             }
                         }
