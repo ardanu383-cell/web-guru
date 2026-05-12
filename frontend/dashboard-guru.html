@@ -1880,8 +1880,11 @@
             document.getElementById('pageModal').classList.remove('hidden');
 
             setTimeout(() => {
-                if (!pageEditorInit) {
-                    $('#pageKonten').summernote({
+                // Destroy dulu jika sudah ada, lalu init ulang
+                if ($('#pageKonten').data('summernote')) {
+                    $('#pageKonten').summernote('destroy');
+                }
+                $('#pageKonten').summernote({
                         lang: 'id-ID', height: 400,
                         disableDragAndDrop: true,
                         tabDisable: false,
@@ -1902,9 +1905,7 @@
                         styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre'],
                         callbacks: {
                             onInit: function() {
-                                $(this).find('.note-editable').on('keydown', function(e) {
-                                    e.stopPropagation();
-                                });
+                                // Biarkan semua keyboard event berjalan normal
                             }
                         },
                         buttons: {
@@ -1932,8 +1933,6 @@
                             }
                         }
                     });
-                    pageEditorInit = true;
-                }
                 $('#pageKonten').summernote('code', data?.konten || '');
             }, 100);
         }
