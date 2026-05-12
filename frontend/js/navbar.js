@@ -71,7 +71,7 @@ async function loadNavbar() {
             return `<a href="${href}" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium rounded-lg hover:bg-indigo-50 transition-colors">${m.label}</a>`;
         }).join('');
 
-        // ── Mobile menu (collapsible sub-menu) ───────────────────
+        // ── Mobile menu (collapsible, support 3 level) ───────────────
         let mobileIdx = 0;
         const mobileMenuHTML = menus.map(m => {
             const href = m.tipe === 'page' ? `page.html?slug=${m.link}` : (m.link || '#');
@@ -79,11 +79,40 @@ async function loadNavbar() {
                 const idx = mobileIdx++;
                 const subItems = m.submenu.map(sub => {
                     const subHref = sub.tipe === 'page' ? `page.html?slug=${sub.link}` : (sub.link || '#');
+
+                    // Sub-sub menu (level 3) — collapsible juga
+                    if (sub.submenu && sub.submenu.length > 0) {
+                        const subIdx = mobileIdx++;
+                        const subsubItems = sub.submenu.map(ss => {
+                            const ssHref = ss.tipe === 'page' ? `page.html?slug=${ss.link}` : (ss.link || '#');
+                            return `<a href="${ssHref}" class="flex items-center gap-2 pl-16 pr-4 py-2 text-sm text-gray-500 hover:bg-purple-50 hover:text-purple-600 border-b border-gray-50">
+                                <span class="w-1 h-1 rounded-full bg-purple-300 flex-shrink-0"></span>
+                                ${ss.label}
+                            </a>`;
+                        }).join('');
+                        return `
+                            <div>
+                                <button onclick="toggleMobileSub(${subIdx})" class="w-full flex items-center justify-between pl-8 pr-4 py-2.5 text-sm text-gray-600 hover:bg-indigo-50 border-b border-gray-100 transition-colors">
+                                    <span class="flex items-center gap-2">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-indigo-300 flex-shrink-0"></span>
+                                        ${sub.label}
+                                    </span>
+                                    <svg id="mobile-arrow-${subIdx}" class="w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div id="mobile-sub-${subIdx}" class="hidden bg-purple-50/50">
+                                    ${subsubItems}
+                                </div>
+                            </div>`;
+                    }
+
                     return `<a href="${subHref}" class="flex items-center gap-2 pl-8 pr-4 py-2.5 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 border-b border-gray-50">
                         <span class="w-1.5 h-1.5 rounded-full bg-indigo-300 flex-shrink-0"></span>
                         ${sub.label}
                     </a>`;
                 }).join('');
+
                 return `
                     <div>
                         <button onclick="toggleMobileSub(${idx})" class="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-indigo-50 font-medium border-b border-gray-100 transition-colors">
