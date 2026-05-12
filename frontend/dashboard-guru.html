@@ -55,6 +55,10 @@
                     Siswa
                     <span id="pendingBadge" class="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-0.5 hidden">0</span>
                 </a>
+                <a href="#" onclick="showSection('pengaturan')" class="sidebar-link flex items-center px-6 py-3 text-gray-700" id="nav-pengaturan">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    Pengaturan
+                </a>
             </nav>
         </aside>
 
@@ -160,7 +164,7 @@
                             Semua Siswa
                         </button>
                         <div class="ml-auto flex gap-2">
-                            <a href="/api/siswa/template" class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 flex items-center gap-1">
+                            <a onclick="downloadTemplate()" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 flex items-center gap-1">
                                 📥 Template Excel
                             </a>
                             <button onclick="document.getElementById('importModal').classList.remove('hidden')"
@@ -214,6 +218,80 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Section: Pengaturan -->
+                <div id="section-pengaturan" class="hidden">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Pengaturan Akun</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <!-- Ubah Password -->
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <h3 class="font-bold text-gray-800 mb-1">🔒 Ubah Password</h3>
+                            <p class="text-gray-500 text-sm mb-4">Ganti password akun Anda</p>
+                            <form id="changePasswordForm" class="space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Password Lama</label>
+                                    <input type="password" id="passLama" required
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                        placeholder="Password saat ini">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                                    <input type="password" id="passBaru" required minlength="6"
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                        placeholder="Minimal 6 karakter">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password Baru</label>
+                                    <input type="password" id="passKonfirmasi" required minlength="6"
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                        placeholder="Ulangi password baru">
+                                </div>
+                                <button type="submit"
+                                    class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition font-medium">
+                                    Simpan Password
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Kode Undangan Guru -->
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <h3 class="font-bold text-gray-800 mb-1">🔑 Kode Undangan Guru</h3>
+                            <p class="text-gray-500 text-sm mb-4">Kode ini digunakan guru untuk mendaftar</p>
+
+                            <!-- Tampilkan kode saat ini -->
+                            <div class="bg-gray-50 rounded-lg p-3 mb-4 flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs text-gray-500 mb-1">Kode saat ini</div>
+                                    <div id="currentCode" class="font-mono font-bold text-gray-800 tracking-widest">••••••••</div>
+                                </div>
+                                <button onclick="loadInviteCode()" class="text-indigo-600 text-sm hover:underline">Lihat</button>
+                            </div>
+
+                            <form id="updateInviteForm" class="space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Kode Baru</label>
+                                    <input type="text" id="kodeBaru" required minlength="6"
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none font-mono"
+                                        placeholder="Minimal 6 karakter">
+                                    <button type="button" onclick="generateKode()"
+                                        class="mt-1 text-xs text-purple-600 hover:underline">⚡ Generate kode acak</button>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi dengan Password Anda</label>
+                                    <input type="password" id="passKonfirmasiKode" required
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
+                                        placeholder="Password akun Anda">
+                                </div>
+                                <button type="submit"
+                                    class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition font-medium">
+                                    Perbarui Kode Undangan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
@@ -386,7 +464,7 @@
         document.getElementById('userName').textContent = user?.nama || '';
 
         // ── Navigation ──────────────────────────────────────────────
-        const sections = ['dashboard', 'materi', 'kuis', 'berita', 'siswa'];
+        const sections = ['dashboard', 'materi', 'kuis', 'berita', 'siswa', 'pengaturan'];
 
         function showSection(name) {
             sections.forEach(s => {
@@ -855,6 +933,25 @@
             a.click();
         }
 
+        async function downloadTemplate() {
+            await downloadWithAuth('/api/siswa/template', 'template-import-siswa.xlsx');
+        }
+
+        async function downloadWithAuth(url, filename) {
+            try {
+                const res = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if (!res.ok) throw new Error('Gagal download');
+                const blob = await res.blob();
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(a.href);
+            } catch (e) { alert('Gagal download file'); }
+        }
+
         document.getElementById('importForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const file = document.getElementById('importFile').files[0];
@@ -878,6 +975,58 @@
                 resultDiv.className = 'p-3 rounded-lg text-sm bg-red-50 text-red-800';
                 resultDiv.textContent = 'Gagal import: ' + e.message;
             }
+        });
+
+        // ── Pengaturan ────────────────────────────────────────────────
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const passBaru = document.getElementById('passBaru').value;
+            const konfirmasi = document.getElementById('passKonfirmasi').value;
+            if (passBaru !== konfirmasi) {
+                alert('Password baru dan konfirmasi tidak sama.');
+                return;
+            }
+            try {
+                await api.request('/auth/change-password', {
+                    method: 'PUT',
+                    body: {
+                        password_lama: document.getElementById('passLama').value,
+                        password_baru: passBaru
+                    }
+                });
+                alert('Password berhasil diubah!');
+                document.getElementById('changePasswordForm').reset();
+            } catch (e) { alert(e.message); }
+        });
+
+        async function loadInviteCode() {
+            try {
+                const data = await api.get('/auth/invite-code');
+                document.getElementById('currentCode').textContent = data.masked;
+            } catch (e) { alert('Gagal memuat kode'); }
+        }
+
+        function generateKode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let kode = '';
+            for (let i = 0; i < 10; i++) kode += chars[Math.floor(Math.random() * chars.length)];
+            document.getElementById('kodeBaru').value = kode;
+        }
+
+        document.getElementById('updateInviteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await api.request('/auth/invite-code', {
+                    method: 'PUT',
+                    body: {
+                        kode_baru: document.getElementById('kodeBaru').value,
+                        password: document.getElementById('passKonfirmasiKode').value
+                    }
+                });
+                alert('Kode undangan berhasil diperbarui!');
+                document.getElementById('updateInviteForm').reset();
+                document.getElementById('currentCode').textContent = '••••••••';
+            } catch (e) { alert(e.message); }
         });
 
         // Load stats awal

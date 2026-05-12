@@ -104,3 +104,81 @@ exports.getMe = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Ubah password
+exports.changePassword = async (req, res) => {
+    try {
+        const { password_lama, password_baru } = req.body;
+        if (!password_lama || !password_baru) {
+            return res.status(400).json({ message: 'Password lama dan baru wajib diisi.' });
+        }
+        if (password_baru.length < 6) {
+            return res.status(400).json({ message: 'Password baru minimal 6 karakter.' });
+        }
+
+        const [users] = await pool.query('SELECT * FROM users WHERE id = ?', [req.user.id]);
+        const user = users[0];
+
+        const isMatch = await bcrypt.compare(password_lama, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Password lama tidak sesuai.' });
+        }
+
+        const hashed = await bcrypt.hash(password_baru, 10);
+        await pool.query('UPDATE users SET password = ? WHERE id = ?', [hashed, req.user.id]);
+        res.json({ message: 'Password berhasil diubah.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Lihat kode undangan (hanya tampilkan sebagian)
+exports.getInviteCode = async (req, res) => {
+    if (req.user.role !== 'guru') {
+        return res.status(403).json({ message: 'Akses ditolak.' });
+    }
+    const code = process.env.GURU_INVITE_CODE || '';
+    // Tampilkan sebagian kode saja untuk keamanan
+    const masked = code.length > 4
+        ? code.substring(0, 3) + '*'.repeat(code.length - 4) + code.slice(-1)
+        : '****';
+    res.json({ masked, length: code.length });
+};
+
+// Update kode undangan — simpan ke file .env
+exports.updateInviteCode = async (req, res) => {
+    if (req.user.role !== 'guru') {
+        return res.status(403).json({ message: 'Akses ditolak.' });
+    }
+    const { kode_baru, password } = req.body;
+    if (!kode_baru || kode_baru.length < 6) {
+        return res.status(400).json({ message: 'Kode undangan minimal 6 karakter.' });
+    }
+
+    // Verifikasi password admin sebelum ubah kode
+    const [users] = await pool.query('SELECT * FROM users WHERE id = ?', [req.user.id]);
+    const isMatch = await bcrypt.compare(password, users[0].password);
+    if (!isMatch) {
+        return res.status(400).json({ message: 'Password tidak sesuai.' });
+    }
+
+    try {
+        const fs = require('fs');
+        const path = require('path');
+        const envPath = path.join(__dirname, '../../.env');
+        let envContent = fs.readFileSync(envPath, 'utf8');
+
+        if (envContent.includes('GURU_INVITE_CODE=')) {
+            envContent = envContent.replace(/GURU_INVITE_CODE=.*/g, `GURU_INVITE_CODE=${kode_baru}`);
+        } else {
+            envContent += `\nGURU_INVITE_CODE=${kode_baru}`;
+        }
+
+        fs.writeFileSync(envPath, envContent);
+        process.env.GURU_INVITE_CODE = kode_baru;
+
+        res.json({ message: 'Kode undangan berhasil diperbarui.' });
+    } catch (e) {
+        res.status(500).json({ message: 'Gagal menyimpan kode: ' + e.message });
+    }
+};
