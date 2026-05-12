@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Environment variables (jangan pernah di-commit)
+backend/.env
+
+# Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*

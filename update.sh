@@ -18,6 +18,14 @@ echo "📦 Install/update dependencies backend..."
 cd "$BACKEND_DIR"
 npm install --omit=dev
 
+# Cek apakah .env ada
+if [ ! -f "$BACKEND_DIR/.env" ]; then
+    echo "⚠️  File .env tidak ditemukan!"
+    echo "   Buat file .env dari template: cp $BACKEND_DIR/.env.example $BACKEND_DIR/.env"
+    echo "   Lalu isi dengan nilai yang benar, kemudian jalankan update.sh lagi."
+    exit 1
+fi
+
 echo "♻️  Restart backend dengan PM2..."
 pm2 restart web-guru-backend
 
