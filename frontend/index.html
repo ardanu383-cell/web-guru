@@ -26,10 +26,10 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center">
-                        <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold text-xl">G</span>
+                        <div class="brand-logo w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <span class="brand-logo-teks text-white font-bold text-xl">G</span>
                         </div>
-                        <span class="ml-2 text-xl font-bold text-gray-800">GuruOnline</span>
+                        <span class="brand-nama ml-2 text-xl font-bold text-gray-800">GuruOnline</span>
                     </div>
                     <div class="hidden md:ml-10 md:flex md:space-x-8">
                         <a href="#beranda" class="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Beranda</a>
@@ -224,8 +224,18 @@
                 if (s.fitur_section_judul) document.getElementById('fitur-section-judul').textContent = s.fitur_section_judul;
                 if (s.fitur_section_deskripsi) document.getElementById('fitur-section-deskripsi').textContent = s.fitur_section_deskripsi;
 
-                // CTA
-                document.getElementById('cta-judul').textContent = s.cta_judul;
+                // Brand / Logo
+                const brandNama = document.querySelectorAll('.brand-nama');
+                brandNama.forEach(el => el.textContent = s.nama_website || 'GuruOnline');
+                document.title = (s.nama_website || 'GuruOnline') + ' - Platform Pembelajaran Modern';
+
+                if (s.logo_url) {
+                    document.querySelectorAll('.brand-logo').forEach(el => {
+                        el.innerHTML = `<img src="${s.logo_url}" class="w-10 h-10 rounded-lg object-cover">`;
+                    });
+                } else if (s.logo_teks) {
+                    document.querySelectorAll('.brand-logo-teks').forEach(el => el.textContent = s.logo_teks);
+                }
                 document.getElementById('cta-subjudul').textContent = s.cta_subjudul;
                 document.getElementById('cta-tombol').textContent = s.cta_tombol_teks;
                 if (s.cta_tampil === 'false') document.getElementById('cta-section').classList.add('hidden');

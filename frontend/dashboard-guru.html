@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Guru - GuruOnline</title>
+    <title>Dashboard - GuruOnline</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/custom.css">
     <!-- jQuery & Summernote -->
@@ -27,10 +27,10 @@
         <aside id="sidebar" class="w-64 bg-white shadow-xl fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
             <div class="p-6 flex items-center justify-between">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold">G</span>
+                    <div id="sidebar-logo" class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span id="sidebar-logo-teks" class="text-white font-bold">G</span>
                     </div>
-                    <span class="ml-2 text-xl font-bold">GuruOnline</span>
+                    <span id="sidebar-brand-nama" class="ml-2 text-xl font-bold">GuruOnline</span>
                 </div>
                 <!-- Close button mobile -->
                 <button onclick="toggleSidebar()" class="md:hidden p-1 rounded hover:bg-gray-100">
@@ -82,7 +82,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
-                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Dashboard Guru</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Dashboard</h1>
                 <div class="flex items-center space-x-2 md:space-x-4">
                     <span id="userName" class="text-gray-700 font-medium text-sm md:text-base hidden sm:block"></span>
                     <button onclick="logout()" class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
@@ -392,6 +392,33 @@
                     <div id="ptab-website-content" class="hidden">
                         <h2 class="text-xl font-bold text-gray-800 mb-6">Pengaturan Tampilan Website</h2>
                         <form id="websiteSettingsForm" class="space-y-6">
+
+                            <!-- Brand / Logo -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="font-bold text-gray-800 mb-4 text-lg">🏷 Brand & Logo</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Website</label>
+                                        <input type="text" name="nama_website" placeholder="GuruOnline" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Huruf Logo (jika tidak pakai gambar)</label>
+                                        <input type="text" name="logo_teks" maxlength="2" placeholder="G" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 font-bold text-center text-xl">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Upload Logo Gambar (opsional, menggantikan huruf)</label>
+                                        <div class="flex items-center gap-3">
+                                            <input type="file" id="logoImageFile" accept="image/*" class="flex-1 px-3 py-2 border rounded-lg text-sm">
+                                            <button type="button" onclick="uploadLogoImage()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Upload</button>
+                                        </div>
+                                        <input type="hidden" name="logo_url" id="logo_url_val">
+                                        <div id="logo-preview" class="mt-2 hidden">
+                                            <img id="logo-preview-img" src="" class="h-12 rounded-lg border">
+                                            <button type="button" onclick="hapusLogo()" class="ml-2 text-red-500 text-sm hover:underline">Hapus logo gambar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Hero Section -->
                             <div class="bg-white rounded-xl shadow-md p-6">
@@ -863,6 +890,17 @@
         if (user && user.role !== 'guru') window.location.href = 'dashboard-siswa.html';
         document.getElementById('userName').textContent = user?.nama || '';
 
+        // Load brand dari settings
+        fetch('/api/settings').then(r => r.json()).then(s => {
+            if (s.nama_website) document.getElementById('sidebar-brand-nama').textContent = s.nama_website;
+            if (s.logo_url) {
+                const logoEl = document.getElementById('sidebar-logo');
+                logoEl.innerHTML = `<img src="${s.logo_url}" class="w-10 h-10 rounded-lg object-cover">`;
+            } else if (s.logo_teks) {
+                document.getElementById('sidebar-logo-teks').textContent = s.logo_teks;
+            }
+        }).catch(() => {});
+
         // ── Sidebar toggle (mobile) ──────────────────────────────────
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -944,6 +982,12 @@
                         document.getElementById('hero_bg_image_val').value = s.hero_bg_image;
                     }
                 }
+                // Tampilkan preview logo jika ada
+                if (s.logo_url) {
+                    document.getElementById('logo_url_val').value = s.logo_url;
+                    document.getElementById('logo-preview-img').src = s.logo_url;
+                    document.getElementById('logo-preview').classList.remove('hidden');
+                }
             } catch(e) { alert('Gagal memuat pengaturan website'); }
         }
 
@@ -953,6 +997,32 @@
                 document.getElementById('bg-image-section').classList.toggle('hidden', this.value !== 'image');
             });
         });
+
+        async function uploadLogoImage() {
+            const file = document.getElementById('logoImageFile').files[0];
+            if (!file) { alert('Pilih gambar logo dulu'); return; }
+            const formData = new FormData();
+            formData.append('file', file);
+            try {
+                const res = await fetch('/api/upload/image', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: formData
+                });
+                const d = await res.json();
+                if (!res.ok) throw new Error(d.message);
+                document.getElementById('logo_url_val').value = d.url;
+                document.getElementById('logo-preview-img').src = d.url;
+                document.getElementById('logo-preview').classList.remove('hidden');
+                alert('Logo berhasil diupload! Klik Simpan untuk menerapkan.');
+            } catch(e) { alert('Gagal upload: ' + e.message); }
+        }
+
+        function hapusLogo() {
+            document.getElementById('logo_url_val').value = '';
+            document.getElementById('logo-preview').classList.add('hidden');
+            document.getElementById('logoImageFile').value = '';
+        }
 
         async function uploadBgImage() {
             const file = document.getElementById('bgImageFile').files[0];

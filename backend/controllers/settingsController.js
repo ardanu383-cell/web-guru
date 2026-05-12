@@ -37,6 +37,9 @@ const DEFAULTS = {
     cta_tombol_teks: 'Daftar Gratis Sekarang',
     cta_tampil: 'true',
     nama_website: 'GuruOnline',
+    logo_teks: 'G',
+    logo_url: '',          // URL gambar logo (kosong = pakai teks)
+    logo_warna: 'from-indigo-500 to-purple-600',  // gradient warna
 };
 
 // Ambil semua settings
