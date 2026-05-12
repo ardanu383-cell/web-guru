@@ -256,12 +256,13 @@
                             <table class="w-full">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Label</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Link/Halaman</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase w-12">↕</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Label</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Link/Halaman</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="menuList" class="divide-y divide-gray-200"></tbody>
@@ -1717,16 +1718,26 @@
                 allMenus = await api.get('/menu/admin/all');
                 const tbody = document.getElementById('menuList');
                 tbody.innerHTML = allMenus.length === 0
-                    ? '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-400">Belum ada menu</td></tr>'
-                    : allMenus.map(m => {
+                    ? '<tr><td colspan="7" class="px-6 py-8 text-center text-gray-400">Belum ada menu</td></tr>'
+                    : allMenus.map((m, idx) => {
                         const parent = allMenus.find(p => p.id === m.parent_id);
-                        return `<tr>
-                            <td class="px-6 py-4 font-medium text-gray-900">${m.parent_id ? '&nbsp;&nbsp;↳ ' : ''}${m.label}</td>
-                            <td class="px-6 py-4 text-gray-500 text-sm">${parent ? parent.label : '—'}</td>
-                            <td class="px-6 py-4"><span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">${m.tipe}</span></td>
-                            <td class="px-6 py-4 text-gray-500 text-sm font-mono">${m.link || '—'}</td>
-                            <td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-xs ${m.aktif ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">${m.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
-                            <td class="px-6 py-4 flex gap-2">
+                        return `<tr class="hover:bg-gray-50">
+                            <td class="px-3 py-3">
+                                <div class="flex flex-col gap-0.5">
+                                    <button onclick="moveMenu(${m.id},'up')" ${idx===0?'disabled':''} class="w-6 h-6 flex items-center justify-center rounded hover:bg-indigo-100 text-gray-400 hover:text-indigo-600 disabled:opacity-20 disabled:cursor-not-allowed transition">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+                                    </button>
+                                    <button onclick="moveMenu(${m.id},'down')" ${idx===allMenus.length-1?'disabled':''} class="w-6 h-6 flex items-center justify-center rounded hover:bg-indigo-100 text-gray-400 hover:text-indigo-600 disabled:opacity-20 disabled:cursor-not-allowed transition">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 font-medium text-gray-900">${m.parent_id ? '<span class="text-gray-400 mr-1 text-xs">↳</span>' : ''}${m.label}</td>
+                            <td class="px-4 py-3 text-gray-500 text-sm">${parent ? parent.label : '—'}</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">${m.tipe}</span></td>
+                            <td class="px-4 py-3 text-gray-500 text-xs font-mono">${m.link || '—'}</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs ${m.aktif ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">${m.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
+                            <td class="px-4 py-3 flex gap-2">
                                 <button onclick="editMenu(${m.id})" class="px-3 py-1 bg-blue-100 text-blue-600 rounded text-sm hover:bg-blue-200">Edit</button>
                                 <button onclick="deleteMenu(${m.id})" class="px-3 py-1 bg-red-100 text-red-600 rounded text-sm hover:bg-red-200">Hapus</button>
                             </td>
@@ -1824,6 +1835,32 @@
                 await api.delete(`/menu/${id}`);
                 loadMenuList();
             } catch(e) { alert('Gagal menghapus menu'); }
+        }
+
+        async function moveMenu(id, direction) {
+            const idx = allMenus.findIndex(m => m.id === id);
+            if (idx === -1) return;
+            const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+            if (swapIdx < 0 || swapIdx >= allMenus.length) return;
+
+            const a = allMenus[idx];
+            const b = allMenus[swapIdx];
+
+            // Tukar nilai urutan
+            const urutanA = a.urutan;
+            const urutanB = b.urutan;
+
+            // Jika urutan sama, set berdasarkan index
+            const newA = swapIdx;
+            const newB = idx;
+
+            try {
+                await Promise.all([
+                    api.request(`/menu/${a.id}`, { method: 'PUT', body: { ...a, urutan: newA } }),
+                    api.request(`/menu/${b.id}`, { method: 'PUT', body: { ...b, urutan: newB } })
+                ]);
+                loadMenuList();
+            } catch(e) { alert('Gagal mengubah urutan'); }
         }
 
         // ── Halaman ───────────────────────────────────────────────────
