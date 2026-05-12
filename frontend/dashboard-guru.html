@@ -224,6 +224,21 @@
                     <h2 class="text-xl font-bold text-gray-800 mb-6">Pengaturan Akun</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
+                        <!-- Info Akun Aktif -->
+                        <div class="md:col-span-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white">
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-2xl font-bold" id="adminAvatar">G</div>
+                                <div>
+                                    <div class="text-xs text-indigo-200 mb-1">Akun yang sedang login</div>
+                                    <div class="text-xl font-bold" id="adminNama">-</div>
+                                    <div class="text-indigo-200 text-sm" id="adminEmail">-</div>
+                                    <div class="mt-1">
+                                        <span class="bg-white bg-opacity-20 text-white text-xs px-2 py-0.5 rounded-full" id="adminRole">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Ubah Password -->
                         <div class="bg-white rounded-xl shadow-md p-6">
                             <h3 class="font-bold text-gray-800 mb-1">🔒 Ubah Password</h3>
@@ -478,6 +493,15 @@
             if (name === 'kuis') loadKuis();
             if (name === 'berita') loadBerita();
             if (name === 'siswa') loadSiswa();
+            if (name === 'pengaturan') loadProfilAdmin();
+        }
+
+        function loadProfilAdmin() {
+            const u = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('adminNama').textContent = u.nama || '-';
+            document.getElementById('adminEmail').textContent = u.email || '-';
+            document.getElementById('adminRole').textContent = u.role === 'guru' ? '👨‍🏫 Guru' : u.role;
+            document.getElementById('adminAvatar').textContent = (u.nama || 'G')[0].toUpperCase();
         }
 
         // ── Materi ───────────────────────────────────────────────────
@@ -1002,7 +1026,7 @@
         async function loadInviteCode() {
             try {
                 const data = await api.get('/auth/invite-code');
-                document.getElementById('currentCode').textContent = data.masked;
+                document.getElementById('currentCode').textContent = data.code;
             } catch (e) { alert('Gagal memuat kode'); }
         }
 

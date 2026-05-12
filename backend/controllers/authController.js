@@ -132,17 +132,13 @@ exports.changePassword = async (req, res) => {
     }
 };
 
-// Lihat kode undangan (hanya tampilkan sebagian)
+// Lihat kode undangan (kode penuh)
 exports.getInviteCode = async (req, res) => {
     if (req.user.role !== 'guru') {
         return res.status(403).json({ message: 'Akses ditolak.' });
     }
-    const code = process.env.GURU_INVITE_CODE || '';
-    // Tampilkan sebagian kode saja untuk keamanan
-    const masked = code.length > 4
-        ? code.substring(0, 3) + '*'.repeat(code.length - 4) + code.slice(-1)
-        : '****';
-    res.json({ masked, length: code.length });
+    const code = process.env.GURU_INVITE_CODE || '(belum diset)';
+    res.json({ code });
 };
 
 // Update kode undangan — simpan ke file .env
