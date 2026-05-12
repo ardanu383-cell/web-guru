@@ -19,6 +19,9 @@
         .note-editor .note-toolbar { z-index: 1; }
         /* Sembunyikan overlay modal berita saat summernote dialog aktif */
         .note-modal-open #beritaOverlay { display: none !important; }
+        /* Pastikan area edit summernote bisa menerima semua keyboard input */
+        .note-editable { outline: none; }
+        .note-editable * { pointer-events: auto; }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -1876,7 +1879,9 @@
             setTimeout(() => {
                 if (!pageEditorInit) {
                     $('#pageKonten').summernote({
-                        lang: 'id-ID', height: 350,
+                        lang: 'id-ID', height: 400,
+                        disableDragAndDrop: true,
+                        tabDisable: false,
                         toolbar: [
                             ['style', ['style']],
                             ['font', ['bold', 'italic', 'underline', 'clear']],
@@ -1886,6 +1891,18 @@
                             ['insert', ['link', 'hr', 'uploadPageImg']],
                             ['view', ['fullscreen', 'codeview']]
                         ],
+                        callbacks: {
+                            onInit: function() {
+                                // Pastikan Enter berfungsi normal di dalam editor
+                                const editor = this;
+                                $(editor).find('.note-editable').on('keydown', function(e) {
+                                    e.stopPropagation();
+                                });
+                            },
+                            onPaste: function(e) {
+                                // Biarkan paste berjalan normal
+                            }
+                        },
                         buttons: {
                             uploadPageImg: function(ctx) {
                                 const ui = $.summernote.ui;
