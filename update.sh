@@ -12,7 +12,8 @@ BACKEND_DIR="$APP_DIR/backend"
 
 echo "📥 Pull kode terbaru dari GitHub..."
 cd "$APP_DIR"
-git pull
+git fetch origin
+git reset --hard origin/main
 
 echo "📦 Install/update dependencies backend..."
 cd "$BACKEND_DIR"
