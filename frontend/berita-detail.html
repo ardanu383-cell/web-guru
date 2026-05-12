@@ -58,7 +58,8 @@
 
         async function loadBerita() {
             try {
-                const b = await api.get(`/berita/${beritaId}`);
+                const res = await fetch(`/api/berita/${beritaId}`);
+                const b = await res.json();
 
                 const kategoriColors = {
                     umum: 'bg-gray-100 text-gray-700',

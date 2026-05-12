@@ -99,7 +99,8 @@
 
         async function loadBerita() {
             try {
-                allBerita = await api.get('/berita');
+                const res = await fetch('/api/berita');
+                allBerita = await res.json();
                 renderBerita(allBerita);
             } catch (e) {
                 document.getElementById('loadingState').classList.add('hidden');

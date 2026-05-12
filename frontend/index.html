@@ -162,7 +162,8 @@
         // Load 3 berita terbaru di homepage
         async function loadBeritaHome() {
             try {
-                const berita = await api.get('/berita');
+                const res = await fetch('/api/berita');
+                const berita = await res.json();
                 const container = document.getElementById('beritaHome');
                 const tiga = berita.slice(0, 3);
 
