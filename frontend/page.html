@@ -28,16 +28,29 @@
         .page-konten li > br:only-child { display: none; }
 
         .page-konten a  { color:#4f46e5; text-decoration:underline; }
-        .page-konten img { max-width:45%; border-radius:0.5rem; margin:0.5rem 1rem 0.5rem 0; }
+        .page-konten img { border-radius:0.5rem; margin:0.5rem; }
+        /* Gambar tanpa float — full width */
+        .page-konten img:not([style*="float"]) { max-width:100%; }
+        /* Gambar dengan width% dari summernote */
+        .page-konten div[style*="text-align: left"] img,
+        .page-konten div[style*="text-align:left"] img { float:left; margin:0 1rem 0.5rem 0; }
+        .page-konten div[style*="text-align: right"] img,
+        .page-konten div[style*="text-align:right"] img { float:right; margin:0 0 0.5rem 1rem; }
         /* Pertahankan float dari summernote */
         .page-konten img[style*="float: left"],
-        .page-konten img[style*="float:left"] { float:left !important; margin:0.5rem 1.5rem 0.5rem 0 !important; }
+        .page-konten img[style*="float:left"] { float:left !important; margin:0 1.5rem 0.5rem 0 !important; }
         .page-konten img[style*="float: right"],
-        .page-konten img[style*="float:right"] { float:right !important; margin:0.5rem 0 0.5rem 1.5rem !important; }
-        .page-konten img[style*="float: none"],
-        .page-konten img[style*="float:none"] { float:none !important; display:block; max-width:100%; margin:1rem auto; }
-        /* Clearfix */
-        .page-konten > *::after { content:''; display:table; clear:both; }
+        .page-konten img[style*="float:right"] { float:right !important; margin:0 0 0.5rem 1.5rem !important; }
+        /* Div yang hanya berisi gambar — jadikan float otomatis berdasarkan align */
+        .page-konten div:has(> img:only-child) { margin-bottom: 0.5rem; }
+        .page-konten div[style*="text-align: left"]:has(> img:only-child),
+        .page-konten div[style*="text-align:left"]:has(> img:only-child) {
+            float: left; margin: 0 1.5rem 0.5rem 0; width: auto;
+        }
+        .page-konten div[style*="text-align: right"]:has(> img:only-child),
+        .page-konten div[style*="text-align:right"]:has(> img:only-child) {
+            float: right; margin: 0 0 0.5rem 1.5rem; width: auto;
+        }
         .page-konten table { width:100%; border-collapse:collapse; margin:1rem 0; }
         .page-konten th, .page-konten td { border:1px solid #e5e7eb; padding:0.5rem 0.75rem; text-align:left; }
         .page-konten th { background:#f9fafb; font-weight:600; }
@@ -107,7 +120,18 @@
                 const page = await res.json();
                 document.title = `${page.judul} - GuruOnline`;
                 document.getElementById('pageJudul').textContent = page.judul;
-                document.getElementById('pageKonten').innerHTML = page.konten + '<div style="clear:both"></div>';
+                // Proses konten: jadikan gambar float jika ada di div dengan text-align
+                let konten = page.konten;
+                // Wrap gambar yang ada di div center/left/right agar bisa float
+                konten = konten.replace(
+                    /<div([^>]*style="[^"]*text-align:\s*(left|right)[^"]*"[^>]*)>\s*(<img[^>]*style="([^"]*)"[^>]*>)\s*<\/div>/gi,
+                    function(match, divAttr, align, imgTag, imgStyle) {
+                        const floatDir = align === 'right' ? 'right' : 'left';
+                        const margin = floatDir === 'left' ? '0 1.5rem 0.5rem 0' : '0 0 0.5rem 1.5rem';
+                        return imgTag.replace(/style="([^"]*)"/, `style="$1; float:${floatDir}; margin:${margin}"`);
+                    }
+                );
+                document.getElementById('pageKonten').innerHTML = konten + '<div style="clear:both"></div>';
                 document.getElementById('loadingState').classList.add('hidden');
                 document.getElementById('pageContent').classList.remove('hidden');
             } catch(e) { showNotFound(); }
