@@ -47,7 +47,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="beranda" class="gradient-hero pt-32 pb-20 px-4" id="hero-section">
+    <section id="beranda" class="gradient-hero pt-32 pb-20 px-4">
         <div class="max-w-7xl mx-auto text-center">
             <h1 id="hero-judul" class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
                 Belajar Jadi Lebih Mudah & Menyenangkan
@@ -159,6 +159,21 @@
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script>
+        // Animasi counter angka
+        function animateCounter(el, target) {
+            const text = target.replace(/[^0-9]/g, '');
+            const suffix = target.replace(/[0-9]/g, '');
+            const num = parseInt(text) || 0;
+            if (num === 0) { el.textContent = target; return; }
+            let current = 0;
+            const step = Math.ceil(num / 60);
+            const timer = setInterval(() => {
+                current = Math.min(current + step, num);
+                el.textContent = current.toLocaleString('id-ID') + suffix;
+                if (current >= num) clearInterval(timer);
+            }, 30);
+        }
+
         // Load settings dari API
         async function loadSettings() {
             try {
@@ -166,10 +181,12 @@
                 const s = await res.json();
 
                 // Hero background
-                const heroSection = document.querySelector('#beranda');
+                const heroSection = document.getElementById('beranda');
                 if (s.hero_bg_type === 'image' && s.hero_bg_image) {
-                    heroSection.style.background = `url('${s.hero_bg_image}') center/cover no-repeat`;
-                    heroSection.style.backgroundBlendMode = 'overlay';
+                    heroSection.style.backgroundImage = `url('${s.hero_bg_image}')`;
+                    heroSection.style.backgroundSize = 'cover';
+                    heroSection.style.backgroundPosition = 'center';
+                    heroSection.classList.remove('gradient-hero');
                 }
 
                 // Hero teks
@@ -186,11 +203,16 @@
                 t2.href = s.hero_tombol2_link;
                 if (s.hero_tombol2_tampil === 'false') t2.classList.add('hidden');
 
-                // Stats
+                // Stats dengan animasi counter
                 ['1','2','3'].forEach(n => {
-                    document.getElementById(`stats${n}-angka`).textContent = s[`stats${n}_angka`];
+                    const angkaEl = document.getElementById(`stats${n}-angka`);
+                    const angkaVal = s[`stats${n}_angka`] || angkaEl.textContent;
                     document.getElementById(`stats${n}-label`).textContent = s[`stats${n}_label`];
-                    if (s[`stats${n}_tampil`] === 'false') document.getElementById(`stats${n}-block`).classList.add('hidden');
+                    if (s[`stats${n}_tampil`] === 'false') {
+                        document.getElementById(`stats${n}-block`).classList.add('hidden');
+                    } else {
+                        animateCounter(angkaEl, angkaVal);
+                    }
                 });
 
                 // Fitur
@@ -206,7 +228,12 @@
                 document.getElementById('cta-tombol').textContent = s.cta_tombol_teks;
                 if (s.cta_tampil === 'false') document.getElementById('cta-section').classList.add('hidden');
 
-            } catch(e) { console.log('Settings load failed, using defaults'); }
+            } catch(e) {
+                // Fallback: animasi counter dengan nilai default
+                [['stats1-angka','500+'],['stats2-angka','50+'],['stats3-angka','10,000+']].forEach(([id, val]) => {
+                    animateCounter(document.getElementById(id), val);
+                });
+            }
         }
         loadSettings();
         // Load 3 berita terbaru di homepage
