@@ -22,6 +22,10 @@
         /* Pastikan area edit summernote bisa menerima semua keyboard input */
         .note-editable { outline: none; }
         .note-editable * { pointer-events: auto; }
+        /* Fix list di dalam editor summernote */
+        .note-editable ul { list-style-type: disc !important; padding-left: 2em !important; }
+        .note-editable ol { list-style-type: decimal !important; padding-left: 2em !important; }
+        .note-editable li { display: list-item !important; }
     </style>
 </head>
 <body class="bg-gray-100">
