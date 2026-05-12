@@ -13,6 +13,10 @@ app.use(express.urlencoded({ extended: true }));
 // Static files untuk upload
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Import middleware (harus sebelum dipakai)
+const upload = require('./middleware/upload');
+const { auth } = require('./middleware/auth');
+
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/materi', require('./routes/materi'));
@@ -22,16 +26,14 @@ app.use('/api/berita', require('./routes/berita'));
 app.use('/api/siswa', require('./routes/siswa'));
 app.use('/api/settings', require('./routes/settings'));
 
-// Upload background hero
-app.post('/api/settings/upload-bg', auth, upload.single('file'), async (req, res) => {
+// Upload gambar untuk Summernote
+app.post('/api/upload/image', auth, upload.single('file'), (req, res) => {
     if (!req.file) return res.status(400).json({ message: 'Tidak ada file.' });
     res.json({ url: `/uploads/${req.file.filename}` });
 });
 
-// Upload gambar untuk Summernote
-const upload = require('./middleware/upload');
-const { auth } = require('./middleware/auth');
-app.post('/api/upload/image', auth, upload.single('file'), (req, res) => {
+// Upload background hero
+app.post('/api/settings/upload-bg', auth, upload.single('file'), (req, res) => {
     if (!req.file) return res.status(400).json({ message: 'Tidak ada file.' });
     res.json({ url: `/uploads/${req.file.filename}` });
 });
