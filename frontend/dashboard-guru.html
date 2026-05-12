@@ -1141,10 +1141,7 @@
         }
 
         async function exportSiswa() {
-            const token = localStorage.getItem('token');
-            const a = document.createElement('a');
-            a.href = '/api/siswa/export';
-            a.click();
+            await downloadWithAuth('/api/siswa/export', 'data-siswa.xlsx');
         }
 
         async function downloadTemplate() {
