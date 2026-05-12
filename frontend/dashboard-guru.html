@@ -65,6 +65,10 @@
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     Pengaturan
                 </a>
+                <a href="#" onclick="showSection('menu')" class="sidebar-link flex items-center px-6 py-3 text-gray-700" id="nav-menu">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                    Menu & Halaman
+                </a>
             </nav>
         </aside>
 
@@ -235,6 +239,58 @@
                     </div>
                 </div>
 
+                <!-- Section: Menu & Halaman -->
+                <div id="section-menu" class="hidden">
+                    <div class="flex gap-3 mb-6 border-b pb-3">
+                        <button onclick="switchMenuTab('menu')" id="mtab-menu" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium">🗂 Kelola Menu</button>
+                        <button onclick="switchMenuTab('halaman')" id="mtab-halaman" class="px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50">📄 Kelola Halaman</button>
+                    </div>
+
+                    <!-- Tab Menu -->
+                    <div id="mtab-menu-content">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-gray-800">Kelola Menu Navbar</h2>
+                            <button onclick="openMenuModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">+ Tambah Menu</button>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Label</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Link/Halaman</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="menuList" class="divide-y divide-gray-200"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab Halaman -->
+                    <div id="mtab-halaman-content" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-gray-800">Kelola Halaman</h2>
+                            <button onclick="openPageModal()" class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700">+ Tambah Halaman</button>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pageList" class="divide-y divide-gray-200"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Section: Pengaturan -->
                 <div id="section-pengaturan" class="hidden">
                     <!-- Tab navigasi -->
@@ -397,6 +453,16 @@
                             <!-- Fitur Section -->
                             <div class="bg-white rounded-xl shadow-md p-6">
                                 <h3 class="font-bold text-gray-800 mb-4 text-lg">⚡ Section Fitur</h3>
+                                <div class="space-y-3 mb-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Section</label>
+                                        <input type="text" name="fitur_section_judul" placeholder="Kenapa Memilih GuruOnline?" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Section</label>
+                                        <textarea name="fitur_section_deskripsi" rows="2" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                                    </div>
+                                </div>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div class="border rounded-lg p-4">
                                         <div class="flex items-center justify-between mb-2">
@@ -715,6 +781,81 @@
     <!-- Sidebar overlay (mobile) -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden" onclick="toggleSidebar()"></div>
 
+    <!-- Modal Tambah/Edit Menu -->
+    <div id="menuModal" class="fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black bg-opacity-50" onclick="document.getElementById('menuModal').classList.add('hidden')"></div>
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 relative z-10">
+            <h3 id="menuModalTitle" class="text-xl font-bold mb-4">Tambah Menu</h3>
+            <form id="menuForm" class="space-y-3">
+                <input type="hidden" id="menuId">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Label Menu</label>
+                    <input type="text" id="menuLabel" required class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Contoh: Pendidikan">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Parent Menu (opsional)</label>
+                    <select id="menuParent" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">— Menu Utama —</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tipe</label>
+                    <select id="menuTipe" onchange="toggleMenuTipe()" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="link">Link URL</option>
+                        <option value="page">Halaman</option>
+                    </select>
+                </div>
+                <div id="menuLinkField">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">URL</label>
+                    <input type="text" id="menuLink" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Contoh: https://... atau berita.html">
+                </div>
+                <div id="menuPageField" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Halaman</label>
+                    <select id="menuPageId" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">— Pilih Halaman —</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="menuAktif" checked class="w-4 h-4">
+                    <label class="text-sm text-gray-700">Aktif (tampil di navbar)</label>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('menuModal').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Halaman -->
+    <div id="pageModal" class="fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black bg-opacity-50" onclick="document.getElementById('pageModal').classList.add('hidden')"></div>
+        <div class="bg-white rounded-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto p-6 relative z-10">
+            <h3 id="pageModalTitle" class="text-xl font-bold mb-4">Tambah Halaman</h3>
+            <form id="pageForm" class="space-y-4">
+                <input type="hidden" id="pageId">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Halaman</label>
+                        <input type="text" id="pageJudul" required class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Slug URL</label>
+                        <input type="text" id="pageSlug" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm" placeholder="otomatis dari judul">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Konten Halaman</label>
+                    <textarea id="pageKonten"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('pageModal').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Simpan Halaman</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script>
@@ -732,7 +873,7 @@
         }
 
         // ── Navigation ──────────────────────────────────────────────
-        const sections = ['dashboard', 'materi', 'kuis', 'berita', 'siswa', 'pengaturan'];
+        const sections = ['dashboard', 'materi', 'kuis', 'berita', 'siswa', 'pengaturan', 'menu'];
 
         function showSection(name) {
             sections.forEach(s => {
@@ -753,6 +894,7 @@
             if (name === 'berita') loadBerita();
             if (name === 'siswa') loadSiswa();
             if (name === 'pengaturan') loadProfilAdmin();
+            if (name === 'menu') loadMenuSection();
         }
 
         function loadProfilAdmin() {
@@ -1480,6 +1622,245 @@
                 document.getElementById('currentCode').textContent = '••••••••';
             } catch (e) { alert(e.message); }
         });
+
+        // ── Menu & Halaman ────────────────────────────────────────────
+        let allPages = [];
+        let allMenus = [];
+
+        async function loadMenuSection() {
+            await Promise.all([loadMenuList(), loadPageList()]);
+        }
+
+        function switchMenuTab(tab) {
+            document.getElementById('mtab-menu-content').classList.toggle('hidden', tab !== 'menu');
+            document.getElementById('mtab-halaman-content').classList.toggle('hidden', tab !== 'halaman');
+            document.getElementById('mtab-menu').className = tab === 'menu'
+                ? 'px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium'
+                : 'px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50';
+            document.getElementById('mtab-halaman').className = tab === 'halaman'
+                ? 'px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium'
+                : 'px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50';
+        }
+
+        async function loadMenuList() {
+            try {
+                allMenus = await api.get('/menu/admin/all');
+                const tbody = document.getElementById('menuList');
+                tbody.innerHTML = allMenus.length === 0
+                    ? '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-400">Belum ada menu</td></tr>'
+                    : allMenus.map(m => {
+                        const parent = allMenus.find(p => p.id === m.parent_id);
+                        return `<tr>
+                            <td class="px-6 py-4 font-medium text-gray-900">${m.parent_id ? '&nbsp;&nbsp;↳ ' : ''}${m.label}</td>
+                            <td class="px-6 py-4 text-gray-500 text-sm">${parent ? parent.label : '—'}</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">${m.tipe}</span></td>
+                            <td class="px-6 py-4 text-gray-500 text-sm font-mono">${m.link || '—'}</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-xs ${m.aktif ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">${m.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
+                            <td class="px-6 py-4 flex gap-2">
+                                <button onclick="editMenu(${m.id})" class="px-3 py-1 bg-blue-100 text-blue-600 rounded text-sm hover:bg-blue-200">Edit</button>
+                                <button onclick="deleteMenu(${m.id})" class="px-3 py-1 bg-red-100 text-red-600 rounded text-sm hover:bg-red-200">Hapus</button>
+                            </td>
+                        </tr>`;
+                    }).join('');
+            } catch(e) { console.error(e); }
+        }
+
+        async function loadPageList() {
+            try {
+                allPages = await api.get('/menu/pages');
+                const tbody = document.getElementById('pageList');
+                tbody.innerHTML = allPages.length === 0
+                    ? '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-400">Belum ada halaman</td></tr>'
+                    : allPages.map(p => `<tr>
+                        <td class="px-6 py-4 font-medium text-gray-900">${p.judul}</td>
+                        <td class="px-6 py-4 font-mono text-sm text-indigo-600">
+                            <a href="page.html?slug=${p.slug}" target="_blank" class="hover:underline">${p.slug}</a>
+                        </td>
+                        <td class="px-6 py-4 text-gray-500 text-sm">${new Date(p.created_at).toLocaleDateString('id-ID')}</td>
+                        <td class="px-6 py-4 flex gap-2">
+                            <button onclick="editPage(${p.id})" class="px-3 py-1 bg-blue-100 text-blue-600 rounded text-sm hover:bg-blue-200">Edit</button>
+                            <button onclick="deletePage(${p.id})" class="px-3 py-1 bg-red-100 text-red-600 rounded text-sm hover:bg-red-200">Hapus</button>
+                        </td>
+                    </tr>`).join('');
+            } catch(e) { console.error(e); }
+        }
+
+        function toggleMenuTipe() {
+            const tipe = document.getElementById('menuTipe').value;
+            document.getElementById('menuLinkField').classList.toggle('hidden', tipe !== 'link');
+            document.getElementById('menuPageField').classList.toggle('hidden', tipe !== 'page');
+        }
+
+        function openMenuModal(data = null) {
+            document.getElementById('menuModalTitle').textContent = data ? 'Edit Menu' : 'Tambah Menu';
+            document.getElementById('menuId').value = data?.id || '';
+            document.getElementById('menuLabel').value = data?.label || '';
+            document.getElementById('menuTipe').value = data?.tipe || 'link';
+            document.getElementById('menuLink').value = data?.link || '';
+            document.getElementById('menuAktif').checked = data ? !!data.aktif : true;
+            toggleMenuTipe();
+
+            // Isi dropdown parent
+            const parentSel = document.getElementById('menuParent');
+            parentSel.innerHTML = '<option value="">— Menu Utama —</option>' +
+                allMenus.filter(m => !m.parent_id && m.id !== data?.id)
+                    .map(m => `<option value="${m.id}" ${data?.parent_id == m.id ? 'selected' : ''}>${m.label}</option>`).join('');
+
+            // Isi dropdown halaman
+            const pageSel = document.getElementById('menuPageId');
+            pageSel.innerHTML = '<option value="">— Pilih Halaman —</option>' +
+                allPages.map(p => `<option value="${p.id}" ${data?.page_id == p.id ? 'selected' : ''}>${p.judul} (${p.slug})</option>`).join('');
+
+            document.getElementById('menuModal').classList.remove('hidden');
+        }
+
+        function editMenu(id) {
+            const m = allMenus.find(x => x.id === id);
+            if (m) openMenuModal(m);
+        }
+
+        document.getElementById('menuForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('menuId').value;
+            const tipe = document.getElementById('menuTipe').value;
+            let link = tipe === 'link' ? document.getElementById('menuLink').value : null;
+            if (tipe === 'page') {
+                const pageId = document.getElementById('menuPageId').value;
+                const page = allPages.find(p => p.id == pageId);
+                link = page ? page.slug : null;
+            }
+            const body = {
+                label: document.getElementById('menuLabel').value,
+                parent_id: document.getElementById('menuParent').value || null,
+                tipe,
+                link,
+                aktif: document.getElementById('menuAktif').checked
+            };
+            try {
+                if (id) {
+                    await api.request(`/menu/${id}`, { method: 'PUT', body });
+                } else {
+                    await api.post('/menu', body);
+                }
+                document.getElementById('menuModal').classList.add('hidden');
+                loadMenuList();
+                alert('Menu berhasil disimpan!');
+            } catch(e) { alert(e.message); }
+        });
+
+        async function deleteMenu(id) {
+            if (!confirm('Hapus menu ini? Sub-menu di dalamnya juga akan terhapus.')) return;
+            try {
+                await api.delete(`/menu/${id}`);
+                loadMenuList();
+            } catch(e) { alert('Gagal menghapus menu'); }
+        }
+
+        // ── Halaman ───────────────────────────────────────────────────
+        let pageEditorInit = false;
+
+        function openPageModal(data = null) {
+            document.getElementById('pageModalTitle').textContent = data ? 'Edit Halaman' : 'Tambah Halaman';
+            document.getElementById('pageId').value = data?.id || '';
+            document.getElementById('pageJudul').value = data?.judul || '';
+            document.getElementById('pageSlug').value = data?.slug || '';
+            document.getElementById('pageModal').classList.remove('hidden');
+
+            setTimeout(() => {
+                if (!pageEditorInit) {
+                    $('#pageKonten').summernote({
+                        lang: 'id-ID', height: 350,
+                        toolbar: [
+                            ['style', ['style']],
+                            ['font', ['bold', 'italic', 'underline', 'clear']],
+                            ['color', ['color']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['table', ['table']],
+                            ['insert', ['link', 'hr', 'uploadPageImg']],
+                            ['view', ['fullscreen', 'codeview']]
+                        ],
+                        buttons: {
+                            uploadPageImg: function(ctx) {
+                                const ui = $.summernote.ui;
+                                return ui.button({
+                                    contents: '🖼 Gambar', tooltip: 'Upload Gambar',
+                                    click: function() {
+                                        const inp = document.createElement('input');
+                                        inp.type = 'file'; inp.accept = 'image/*';
+                                        inp.onchange = function() {
+                                            const fd = new FormData();
+                                            fd.append('file', inp.files[0]);
+                                            fetch('/api/upload/image', {
+                                                method: 'POST',
+                                                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                                                body: fd
+                                            }).then(r => r.json()).then(d => {
+                                                if (d.url) ctx.invoke('insertImage', d.url);
+                                            });
+                                        };
+                                        inp.click();
+                                    }
+                                }).render();
+                            }
+                        }
+                    });
+                    pageEditorInit = true;
+                }
+                $('#pageKonten').summernote('code', data?.konten || '');
+            }, 100);
+        }
+
+        // Auto-generate slug dari judul
+        document.getElementById('pageJudul').addEventListener('input', function() {
+            if (!document.getElementById('pageId').value) {
+                document.getElementById('pageSlug').value = this.value.toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
+            }
+        });
+
+        document.getElementById('pageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('pageId').value;
+            const body = {
+                judul: document.getElementById('pageJudul').value,
+                slug: document.getElementById('pageSlug').value,
+                konten: $('#pageKonten').summernote('code')
+            };
+            try {
+                if (id) {
+                    await api.request(`/menu/pages/${id}`, { method: 'PUT', body });
+                } else {
+                    await api.post('/menu/pages', body);
+                }
+                document.getElementById('pageModal').classList.add('hidden');
+                loadPageList();
+                alert('Halaman berhasil disimpan!');
+            } catch(e) { alert(e.message); }
+        });
+
+        async function editPage(id) {
+            try {
+                const res = await fetch(`/api/menu/pages/${id}`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                // Cari dari list dulu
+                const page = allPages.find(p => p.id === id);
+                if (page) {
+                    // Ambil konten lengkap
+                    const fullRes = await fetch(`/api/menu/pages/${page.slug}`);
+                    const full = await fullRes.json();
+                    openPageModal(full);
+                }
+            } catch(e) { alert('Gagal memuat halaman'); }
+        }
+
+        async function deletePage(id) {
+            if (!confirm('Hapus halaman ini?')) return;
+            try {
+                await api.delete(`/menu/pages/${id}`);
+                loadPageList();
+            } catch(e) { alert('Gagal menghapus halaman'); }
+        }
 
         // Load stats awal
         loadMateri();

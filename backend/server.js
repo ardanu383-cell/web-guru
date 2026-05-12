@@ -25,6 +25,7 @@ app.use('/api/nilai', require('./routes/nilai'));
 app.use('/api/berita', require('./routes/berita'));
 app.use('/api/siswa', require('./routes/siswa'));
 app.use('/api/settings', require('./routes/settings'));
+app.use('/api/menu', require('./routes/menu'));
 
 // Upload gambar untuk Summernote
 app.post('/api/upload/image', auth, upload.single('file'), (req, res) => {

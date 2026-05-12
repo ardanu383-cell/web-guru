@@ -88,8 +88,8 @@
     <section id="fitur" class="py-20 px-4">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Kenapa Memilih GuruOnline?</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Platform lengkap dengan fitur modern untuk mendukung pembelajaran jarak jauh maupun tatap muka.</p>
+                <h2 id="fitur-section-judul" class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Kenapa Memilih GuruOnline?</h2>
+                <p id="fitur-section-deskripsi" class="text-gray-600 max-w-2xl mx-auto">Platform lengkap dengan fitur modern untuk mendukung pembelajaran jarak jauh maupun tatap muka.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -221,6 +221,8 @@
                     document.getElementById(`fitur${n}-deskripsi`).textContent = s[`fitur${n}_deskripsi`];
                     if (s[`fitur${n}_tampil`] === 'false') document.getElementById(`fitur${n}-card`).classList.add('hidden');
                 });
+                if (s.fitur_section_judul) document.getElementById('fitur-section-judul').textContent = s.fitur_section_judul;
+                if (s.fitur_section_deskripsi) document.getElementById('fitur-section-deskripsi').textContent = s.fitur_section_deskripsi;
 
                 // CTA
                 document.getElementById('cta-judul').textContent = s.cta_judul;

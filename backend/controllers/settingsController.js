@@ -12,6 +12,8 @@ const DEFAULTS = {
     hero_tombol2_tampil: 'true',
     hero_bg_type: 'gradient',       // 'gradient' atau 'image'
     hero_bg_image: '',              // URL gambar jika type = image
+    fitur_section_judul: 'Kenapa Memilih GuruOnline?',
+    fitur_section_deskripsi: 'Platform lengkap dengan fitur modern untuk mendukung pembelajaran jarak jauh maupun tatap muka.',
     fitur1_judul: 'Materi Lengkap',
     fitur1_deskripsi: 'Akses ratusan materi pembelajaran dalam bentuk video, dokumen, dan teks interaktif.',
     fitur1_tampil: 'true',
