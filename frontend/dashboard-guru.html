@@ -1791,11 +1791,14 @@
             document.getElementById('menuAktif').checked = data ? !!data.aktif : true;
             toggleMenuTipe();
 
-            // Isi dropdown parent
+            // Isi dropdown parent — semua menu bisa jadi parent (kecuali diri sendiri)
             const parentSel = document.getElementById('menuParent');
             parentSel.innerHTML = '<option value="">— Menu Utama —</option>' +
-                allMenus.filter(m => !m.parent_id && m.id !== data?.id)
-                    .map(m => `<option value="${m.id}" ${data?.parent_id == m.id ? 'selected' : ''}>${m.label}</option>`).join('');
+                allMenus.filter(m => m.id !== data?.id)
+                    .map(m => {
+                        const prefix = m.parent_id ? '&nbsp;&nbsp;↳ ' : '';
+                        return `<option value="${m.id}" ${data?.parent_id == m.id ? 'selected' : ''}>${prefix}${m.label}</option>`;
+                    }).join('');
 
             // Isi dropdown halaman
             const pageSel = document.getElementById('menuPageId');

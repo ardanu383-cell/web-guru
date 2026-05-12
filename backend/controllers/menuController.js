@@ -11,6 +11,14 @@ exports.getMenus = async (req, res) => {
                 'SELECT * FROM menus WHERE parent_id = ? AND aktif = 1 ORDER BY urutan ASC',
                 [menu.id]
             );
+            // Load sub-sub menu
+            for (const s of sub) {
+                const [subsub] = await pool.query(
+                    'SELECT * FROM menus WHERE parent_id = ? AND aktif = 1 ORDER BY urutan ASC',
+                    [s.id]
+                );
+                s.submenu = subsub;
+            }
             menu.submenu = sub;
         }
         res.json(menus);

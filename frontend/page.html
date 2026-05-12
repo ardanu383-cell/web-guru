@@ -28,16 +28,16 @@
         .page-konten li > br:only-child { display: none; }
 
         .page-konten a  { color:#4f46e5; text-decoration:underline; }
-        .page-konten img { max-width:100%; border-radius:0.5rem; margin:1rem 0; display:block; }
-        /* Fix float image dari summernote */
+        .page-konten img { max-width:45%; border-radius:0.5rem; margin:0.5rem 1rem 0.5rem 0; }
+        /* Pertahankan float dari summernote */
         .page-konten img[style*="float: left"],
-        .page-konten img[style*="float:left"] { margin-right:1rem; margin-bottom:0.5rem; max-width:50%; }
+        .page-konten img[style*="float:left"] { float:left !important; margin:0.5rem 1.5rem 0.5rem 0 !important; }
         .page-konten img[style*="float: right"],
-        .page-konten img[style*="float:right"] { margin-left:1rem; margin-bottom:0.5rem; max-width:50%; }
-        .page-konten p, .page-konten li, .page-konten h1, .page-konten h2, .page-konten h3 { overflow: visible; }
-        /* Clearfix setelah setiap elemen yang mengandung float */
-        .page-konten::after { content:''; display:table; clear:both; }
-        .page-konten p::after { content:''; display:table; clear:both; }
+        .page-konten img[style*="float:right"] { float:right !important; margin:0.5rem 0 0.5rem 1.5rem !important; }
+        .page-konten img[style*="float: none"],
+        .page-konten img[style*="float:none"] { float:none !important; display:block; max-width:100%; margin:1rem auto; }
+        /* Clearfix */
+        .page-konten > *::after { content:''; display:table; clear:both; }
         .page-konten table { width:100%; border-collapse:collapse; margin:1rem 0; }
         .page-konten th, .page-konten td { border:1px solid #e5e7eb; padding:0.5rem 0.75rem; text-align:left; }
         .page-konten th { background:#f9fafb; font-weight:600; }
@@ -75,7 +75,7 @@
             </div>
             <!-- Isi konten -->
             <div class="max-w-4xl mx-auto px-4 py-10">
-                <div id="pageKonten" class="bg-white rounded-2xl shadow-lg p-8 page-konten text-gray-700 overflow-hidden"></div>
+                <div id="pageKonten" class="bg-white rounded-2xl shadow-lg p-8 page-konten text-gray-700"></div>
             </div>
         </div>
 
@@ -107,7 +107,7 @@
                 const page = await res.json();
                 document.title = `${page.judul} - GuruOnline`;
                 document.getElementById('pageJudul').textContent = page.judul;
-                document.getElementById('pageKonten').innerHTML = page.konten;
+                document.getElementById('pageKonten').innerHTML = page.konten + '<div style="clear:both"></div>';
                 document.getElementById('loadingState').classList.add('hidden');
                 document.getElementById('pageContent').classList.remove('hidden');
             } catch(e) { showNotFound(); }
