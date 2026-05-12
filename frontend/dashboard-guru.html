@@ -1245,17 +1245,20 @@
                 if (!$('#bIsi').data('summernote')) {
                     $('#bIsi').summernote({
                         lang: 'id-ID',
-                        height: 300,
+                        height: 350,
                         placeholder: 'Tulis isi berita di sini...',
                         toolbar: [
-                            ['style', ['style']],
-                            ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
-                            ['color', ['color']],
-                            ['para', ['ul', 'ol', 'paragraph']],
-                            ['table', ['table']],
-                            ['insert', ['link', 'hr', 'uploadImage']],
-                            ['view', ['fullscreen', 'codeview']]
+                            ['style',    ['style']],
+                            ['font',     ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                            ['fontsize', ['fontsize']],
+                            ['color',    ['color']],
+                            ['para',     ['ul', 'ol', 'paragraph']],
+                            ['table',    ['table']],
+                            ['insert',   ['link', 'hr', 'uploadImage']],
+                            ['view',     ['fullscreen', 'codeview']]
                         ],
+                        fontSizes: ['10','11','12','14','16','18','20','22','24','28','32','36','48'],
+                        styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'blockquote'],
                         buttons: {
                             uploadImage: function(context) {
                                 const ui = $.summernote.ui;
@@ -1883,24 +1886,25 @@
                         disableDragAndDrop: true,
                         tabDisable: false,
                         toolbar: [
-                            ['style', ['style']],
-                            ['font', ['bold', 'italic', 'underline', 'clear']],
-                            ['color', ['color']],
-                            ['para', ['ul', 'ol', 'paragraph']],
-                            ['table', ['table']],
+                            ['style',  ['style']],
+                            ['font',   ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                            ['fontsize', ['fontsize']],
+                            ['fontname', ['fontname']],
+                            ['color',  ['color']],
+                            ['para',   ['ul', 'ol', 'paragraph']],
+                            ['height', ['height']],
+                            ['table',  ['table']],
                             ['insert', ['link', 'hr', 'uploadPageImg']],
-                            ['view', ['fullscreen', 'codeview']]
+                            ['view',   ['fullscreen', 'codeview', 'help']]
                         ],
+                        fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','32','36','48','64','82'],
+                        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'],
+                        styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre'],
                         callbacks: {
                             onInit: function() {
-                                // Pastikan Enter berfungsi normal di dalam editor
-                                const editor = this;
-                                $(editor).find('.note-editable').on('keydown', function(e) {
+                                $(this).find('.note-editable').on('keydown', function(e) {
                                     e.stopPropagation();
                                 });
-                            },
-                            onPaste: function(e) {
-                                // Biarkan paste berjalan normal
                             }
                         },
                         buttons: {
