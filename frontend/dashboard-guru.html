@@ -237,6 +237,14 @@
 
                 <!-- Section: Pengaturan -->
                 <div id="section-pengaturan" class="hidden">
+                    <!-- Tab navigasi -->
+                    <div class="flex gap-3 mb-6 border-b pb-3">
+                        <button onclick="switchPengaturanTab('akun')" id="ptab-akun" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium">👤 Akun</button>
+                        <button onclick="switchPengaturanTab('website')" id="ptab-website" class="px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50">🌐 Tampilan Website</button>
+                    </div>
+
+                    <!-- Tab Akun -->
+                    <div id="ptab-akun-content">
                     <h2 class="text-xl font-bold text-gray-800 mb-6">Pengaturan Akun</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -320,6 +328,89 @@
                                 </button>
                             </form>
                         </div>
+                    </div>
+                </div>
+                    </div> <!-- end ptab-akun-content -->
+
+                    <!-- Tab Website -->
+                    <div id="ptab-website-content" class="hidden">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Pengaturan Tampilan Website</h2>
+                        <form id="websiteSettingsForm" class="space-y-6">
+
+                            <!-- Hero Section -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="font-bold text-gray-800 mb-4 text-lg">🎯 Hero Section (Banner Utama)</h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Utama</label>
+                                        <input type="text" name="hero_judul" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Sub Judul</label>
+                                        <textarea name="hero_subjudul" rows="2" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="border rounded-lg p-4">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <label class="text-sm font-medium text-gray-700">Tombol 1</label>
+                                                <label class="flex items-center gap-2 text-sm">
+                                                    <input type="checkbox" name="hero_tombol1_tampil" class="w-4 h-4"> Tampilkan
+                                                </label>
+                                            </div>
+                                            <input type="text" name="hero_tombol1_teks" placeholder="Teks tombol" class="w-full px-3 py-2 border rounded-lg text-sm outline-none mb-2 focus:ring-2 focus:ring-indigo-500">
+                                            <input type="text" name="hero_tombol1_link" placeholder="Link (contoh: register.html)" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="border rounded-lg p-4">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <label class="text-sm font-medium text-gray-700">Tombol 2</label>
+                                                <label class="flex items-center gap-2 text-sm">
+                                                    <input type="checkbox" name="hero_tombol2_tampil" class="w-4 h-4"> Tampilkan
+                                                </label>
+                                            </div>
+                                            <input type="text" name="hero_tombol2_teks" placeholder="Teks tombol" class="w-full px-3 py-2 border rounded-lg text-sm outline-none mb-2 focus:ring-2 focus:ring-indigo-500">
+                                            <input type="text" name="hero_tombol2_link" placeholder="Link (contoh: register-guru.html)" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fitur Section -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="font-bold text-gray-800 mb-4 text-lg">⚡ Section Fitur</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    ${[1,2,3].map(n => `
+                                    <div class="border rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="text-sm font-medium text-gray-700">Fitur ${n}</label>
+                                            <label class="flex items-center gap-2 text-sm">
+                                                <input type="checkbox" name="fitur${n}_tampil" class="w-4 h-4"> Tampil
+                                            </label>
+                                        </div>
+                                        <input type="text" name="fitur${n}_judul" placeholder="Judul fitur" class="w-full px-3 py-2 border rounded-lg text-sm outline-none mb-2 focus:ring-2 focus:ring-indigo-500">
+                                        <textarea name="fitur${n}_deskripsi" rows="2" placeholder="Deskripsi" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                                    </div>`).join('')}
+                                </div>
+                            </div>
+
+                            <!-- CTA Section -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-bold text-gray-800 text-lg">📢 Section CTA (Ajakan)</h3>
+                                    <label class="flex items-center gap-2 text-sm">
+                                        <input type="checkbox" name="cta_tampil" class="w-4 h-4"> Tampilkan
+                                    </label>
+                                </div>
+                                <div class="space-y-3">
+                                    <input type="text" name="cta_judul" placeholder="Judul CTA" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <input type="text" name="cta_subjudul" placeholder="Sub judul CTA" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <input type="text" name="cta_tombol_teks" placeholder="Teks tombol" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition text-lg">
+                                💾 Simpan Pengaturan Website
+                            </button>
+                        </form>
                     </div>
                 </div>
 
@@ -607,6 +698,52 @@
             document.getElementById('adminRole').textContent = u.role === 'guru' ? '👨‍🏫 Guru' : u.role;
             document.getElementById('adminAvatar').textContent = (u.nama || 'G')[0].toUpperCase();
         }
+
+        function switchPengaturanTab(tab) {
+            document.getElementById('ptab-akun-content').classList.toggle('hidden', tab !== 'akun');
+            document.getElementById('ptab-website-content').classList.toggle('hidden', tab !== 'website');
+            document.getElementById('ptab-akun').className = tab === 'akun'
+                ? 'px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium'
+                : 'px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50';
+            document.getElementById('ptab-website').className = tab === 'website'
+                ? 'px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium'
+                : 'px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50';
+            if (tab === 'website') loadWebsiteSettings();
+        }
+
+        async function loadWebsiteSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const s = await res.json();
+                const form = document.getElementById('websiteSettingsForm');
+                Object.keys(s).forEach(key => {
+                    const el = form.querySelector(`[name="${key}"]`);
+                    if (!el) return;
+                    if (el.type === 'checkbox') {
+                        el.checked = s[key] === 'true';
+                    } else {
+                        el.value = s[key] || '';
+                    }
+                });
+            } catch(e) { alert('Gagal memuat pengaturan website'); }
+        }
+
+        document.getElementById('websiteSettingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const data = {};
+            form.querySelectorAll('[name]').forEach(el => {
+                if (el.type === 'checkbox') {
+                    data[el.name] = el.checked ? 'true' : 'false';
+                } else {
+                    data[el.name] = el.value;
+                }
+            });
+            try {
+                await api.request('/settings', { method: 'PUT', body: data });
+                alert('Pengaturan website berhasil disimpan!');
+            } catch(e) { alert(e.message || 'Gagal menyimpan'); }
+        });
 
         // ── Materi ───────────────────────────────────────────────────
         async function loadMateri() {

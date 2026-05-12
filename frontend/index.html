@@ -49,17 +49,17 @@
     <!-- Hero Section -->
     <section id="beranda" class="gradient-hero pt-32 pb-20 px-4">
         <div class="max-w-7xl mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
+            <h1 id="hero-judul" class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
                 Belajar Jadi Lebih Mudah & Menyenangkan
             </h1>
-            <p class="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
+            <p id="hero-subjudul" class="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
                 Platform pembelajaran digital untuk guru dan siswa. Akses materi, kerjakan kuis, dan tingkatkan prestasi belajar Anda.
             </p>
-            <div class="flex justify-center space-x-4">
-                <a href="register.html?role=siswa" class="bg-white text-primary px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition shadow-lg">
+            <div class="flex justify-center space-x-4 flex-wrap gap-4">
+                <a id="hero-tombol1" href="register.html?role=siswa" class="bg-white text-primary px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition shadow-lg">
                     Mulai Belajar
                 </a>
-                <a href="register.html?role=guru" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-primary transition">
+                <a id="hero-tombol2" href="register-guru.html" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-primary transition">
                     Daftar sebagai Guru
                 </a>
             </div>
@@ -93,28 +93,28 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover" id="fitur1-card">
                     <div class="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Materi Lengkap</h3>
-                    <p class="text-gray-600">Akses ratusan materi pembelajaran dalam bentuk video, dokumen, dan teks interaktif.</p>
+                    <h3 id="fitur1-judul" class="text-xl font-bold text-gray-900 mb-3">Materi Lengkap</h3>
+                    <p id="fitur1-deskripsi" class="text-gray-600">Akses ratusan materi pembelajaran dalam bentuk video, dokumen, dan teks interaktif.</p>
                 </div>
 
-                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover" id="fitur2-card">
                     <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Kuis Interaktif</h3>
-                    <p class="text-gray-600">Uji pemahaman Anda dengan kuis online yang langsung menampilkan nilai dan pembahasan.</p>
+                    <h3 id="fitur2-judul" class="text-xl font-bold text-gray-900 mb-3">Kuis Interaktif</h3>
+                    <p id="fitur2-deskripsi" class="text-gray-600">Uji pemahaman Anda dengan kuis online yang langsung menampilkan nilai dan pembahasan.</p>
                 </div>
 
-                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover" id="fitur3-card">
                     <div class="w-14 h-14 bg-pink-100 rounded-xl flex items-center justify-center mb-6">
                         <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Progress Real-time</h3>
-                    <p class="text-gray-600">Pantau perkembangan belajar Anda dengan dashboard yang informatif dan mudah dipahami.</p>
+                    <h3 id="fitur3-judul" class="text-xl font-bold text-gray-900 mb-3">Progress Real-time</h3>
+                    <p id="fitur3-deskripsi" class="text-gray-600">Pantau perkembangan belajar Anda dengan dashboard yang informatif dan mudah dipahami.</p>
                 </div>
             </div>
         </div>
@@ -139,11 +139,11 @@
     </section>
 
     <!-- CTA -->
-    <section class="py-20 px-4 bg-gray-900">
+    <section id="cta-section" class="py-20 px-4 bg-gray-900">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Siap Untuk Meningkatkan Prestasi?</h2>
-            <p class="text-gray-400 mb-10 text-lg">Bergabunglah dengan ribuan siswa dan guru yang telah menggunakan GuruOnline.</p>
-            <a href="register.html" class="inline-block bg-primary text-white px-10 py-4 rounded-xl font-semibold hover:bg-indigo-600 transition text-lg">
+            <h2 id="cta-judul" class="text-3xl md:text-4xl font-bold text-white mb-6">Siap Untuk Meningkatkan Prestasi?</h2>
+            <p id="cta-subjudul" class="text-gray-400 mb-10 text-lg">Bergabunglah dengan ribuan siswa dan guru yang telah menggunakan GuruOnline.</p>
+            <a id="cta-tombol" href="register.html" class="inline-block bg-primary text-white px-10 py-4 rounded-xl font-semibold hover:bg-indigo-600 transition text-lg">
                 Daftar Gratis Sekarang
             </a>
         </div>
@@ -159,6 +159,46 @@
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script>
+        // Load settings dari API
+        async function loadSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const s = await res.json();
+
+                // Hero
+                document.getElementById('hero-judul').textContent = s.hero_judul;
+                document.getElementById('hero-subjudul').textContent = s.hero_subjudul;
+
+                const t1 = document.getElementById('hero-tombol1');
+                t1.textContent = s.hero_tombol1_teks;
+                t1.href = s.hero_tombol1_link;
+                if (s.hero_tombol1_tampil === 'false') t1.classList.add('hidden');
+
+                const t2 = document.getElementById('hero-tombol2');
+                t2.textContent = s.hero_tombol2_teks;
+                t2.href = s.hero_tombol2_link;
+                if (s.hero_tombol2_tampil === 'false') t2.classList.add('hidden');
+
+                // Fitur
+                ['1','2','3'].forEach(n => {
+                    document.getElementById(`fitur${n}-judul`).textContent = s[`fitur${n}_judul`];
+                    document.getElementById(`fitur${n}-deskripsi`).textContent = s[`fitur${n}_deskripsi`];
+                    if (s[`fitur${n}_tampil`] === 'false') document.getElementById(`fitur${n}-card`).classList.add('hidden');
+                });
+
+                // CTA
+                document.getElementById('cta-judul').textContent = s.cta_judul;
+                document.getElementById('cta-subjudul').textContent = s.cta_subjudul;
+                document.getElementById('cta-tombol').textContent = s.cta_tombol_teks;
+                if (s.cta_tampil === 'false') document.getElementById('cta-section').classList.add('hidden');
+
+                // Nama website
+                if (s.nama_website) {
+                    document.querySelectorAll('.brand-name').forEach(el => el.textContent = s.nama_website);
+                }
+            } catch(e) { console.log('Settings load failed, using defaults'); }
+        }
+        loadSettings();
         // Load 3 berita terbaru di homepage
         async function loadBeritaHome() {
             try {
