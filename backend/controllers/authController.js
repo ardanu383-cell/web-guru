@@ -4,7 +4,20 @@ const pool = require('../config/database');
 
 exports.register = async (req, res) => {
     try {
-        const { nama, email, password, role, kelas } = req.body;
+        const { nama, email, password, role, kelas, invite_code } = req.body;
+
+        // Blokir pendaftaran guru tanpa kode undangan
+        if (role === 'guru') {
+            const validCode = process.env.GURU_INVITE_CODE;
+            if (!invite_code || invite_code !== validCode) {
+                return res.status(403).json({ message: 'Kode undangan guru tidak valid.' });
+            }
+        }
+
+        // Hanya izinkan role siswa dan guru dari form publik
+        if (!['siswa', 'guru'].includes(role)) {
+            return res.status(400).json({ message: 'Role tidak valid.' });
+        }
 
         const [existing] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
         if (existing.length > 0) {
@@ -12,17 +25,17 @@ exports.register = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        // Guru langsung approved, siswa harus menunggu persetujuan
+        // Guru dengan kode valid langsung approved, siswa pending
         const status = (role === 'guru') ? 'approved' : 'pending';
 
         const [result] = await pool.query(
             'INSERT INTO users (nama, email, password, role, kelas, status) VALUES (?, ?, ?, ?, ?, ?)',
-            [nama, email, hashedPassword, role || 'siswa', kelas, status]
+            [nama, email, hashedPassword, role, kelas || null, status]
         );
 
         const message = status === 'pending'
             ? 'Registrasi berhasil. Akun Anda menunggu persetujuan admin.'
-            : 'Registrasi berhasil.';
+            : 'Registrasi berhasil. Silakan login.';
 
         res.status(201).json({ message, userId: result.insertId, status });
     } catch (error) {
@@ -72,6 +85,15 @@ exports.login = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+};
+
+exports.verifyInvite = async (req, res) => {
+    const { invite_code } = req.body;
+    const validCode = process.env.GURU_INVITE_CODE;
+    if (!invite_code || invite_code !== validCode) {
+        return res.status(403).json({ message: 'Kode undangan tidak valid.' });
+    }
+    res.json({ message: 'Kode valid.' });
 };
 
 exports.getMe = async (req, res) => {
