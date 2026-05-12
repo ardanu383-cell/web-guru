@@ -1031,9 +1031,11 @@
 
         document.getElementById('tambahSiswaForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const password = document.getElementById('tsPassword').value;
+            const btn = e.target.querySelector('button[type=submit]');
+            btn.disabled = true;
+            btn.textContent = 'Menyimpan...';
             try {
-                await fetch('/api/siswa/tambah', {
+                const res = await fetch('/api/siswa/tambah', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1043,15 +1045,21 @@
                         nama: document.getElementById('tsNama').value,
                         email: document.getElementById('tsEmail').value,
                         kelas: document.getElementById('tsKelas').value,
-                        password
+                        password: document.getElementById('tsPassword').value
                     })
-                }).then(r => r.json()).then(d => {
-                    if (d.message && !d.id && d.message.includes('gagal')) throw new Error(d.message);
-                    document.getElementById('tambahSiswaModal').classList.add('hidden');
-                    switchSiswaTab('semua');
-                    alert('Siswa berhasil ditambahkan!');
                 });
-            } catch (e) { alert(e.message || 'Gagal menambahkan siswa'); }
+                const d = await res.json();
+                if (!res.ok) throw new Error(d.message || 'Gagal menyimpan');
+                document.getElementById('tambahSiswaModal').classList.add('hidden');
+                document.getElementById('tambahSiswaForm').reset();
+                switchSiswaTab('semua');
+                alert('Siswa berhasil ditambahkan!');
+            } catch (err) {
+                alert(err.message || 'Gagal menambahkan siswa');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Simpan';
+            }
         });
 
         function openEditSiswa(id, nama, email, kelas, status) {
