@@ -378,17 +378,30 @@
                             <div class="bg-white rounded-xl shadow-md p-6">
                                 <h3 class="font-bold text-gray-800 mb-4 text-lg">⚡ Section Fitur</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    ${[1,2,3].map(n => `
                                     <div class="border rounded-lg p-4">
                                         <div class="flex items-center justify-between mb-2">
-                                            <label class="text-sm font-medium text-gray-700">Fitur ${n}</label>
-                                            <label class="flex items-center gap-2 text-sm">
-                                                <input type="checkbox" name="fitur${n}_tampil" class="w-4 h-4"> Tampil
-                                            </label>
+                                            <label class="text-sm font-medium text-gray-700">Fitur 1</label>
+                                            <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="fitur1_tampil" class="w-4 h-4"> Tampil</label>
                                         </div>
-                                        <input type="text" name="fitur${n}_judul" placeholder="Judul fitur" class="w-full px-3 py-2 border rounded-lg text-sm outline-none mb-2 focus:ring-2 focus:ring-indigo-500">
-                                        <textarea name="fitur${n}_deskripsi" rows="2" placeholder="Deskripsi" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-                                    </div>`).join('')}
+                                        <input type="text" name="fitur1_judul" placeholder="Judul fitur" class="w-full px-3 py-2 border rounded-lg text-sm outline-none mb-2 focus:ring-2 focus:ring-indigo-500">
+                                        <textarea name="fitur1_deskripsi" rows="2" placeholder="Deskripsi" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                                    </div>
+                                    <div class="border rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="text-sm font-medium text-gray-700">Fitur 2</label>
+                                            <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="fitur2_tampil" class="w-4 h-4"> Tampil</label>
+                                        </div>
+                                        <input type="text" name="fitur2_judul" placeholder="Judul fitur" class="w-full px-3 py-2 border rounded-lg text-sm outline-none mb-2 focus:ring-2 focus:ring-indigo-500">
+                                        <textarea name="fitur2_deskripsi" rows="2" placeholder="Deskripsi" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                                    </div>
+                                    <div class="border rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="text-sm font-medium text-gray-700">Fitur 3</label>
+                                            <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="fitur3_tampil" class="w-4 h-4"> Tampil</label>
+                                        </div>
+                                        <input type="text" name="fitur3_judul" placeholder="Judul fitur" class="w-full px-3 py-2 border rounded-lg text-sm outline-none mb-2 focus:ring-2 focus:ring-indigo-500">
+                                        <textarea name="fitur3_deskripsi" rows="2" placeholder="Deskripsi" class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                                    </div>
                                 </div>
                             </div>
 
