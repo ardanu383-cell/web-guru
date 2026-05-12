@@ -16,19 +16,28 @@
 
         /* List — paksa tampil dengan nomor/bullet */
         .page-konten ul,
-        .page-konten ol { padding-left:2rem; margin:0.8rem 0; }
+        .page-konten ol { padding-left:2rem; margin:0.8rem 0; overflow:hidden; }
         .page-konten ul { list-style-type: disc !important; }
         .page-konten ol { list-style-type: decimal !important; }
         .page-konten ul ul { list-style-type: circle !important; }
         .page-konten ul ul ul { list-style-type: square !important; }
         .page-konten ol ol { list-style-type: lower-alpha !important; }
-        .page-konten li { display: list-item !important; margin:0.3rem 0; line-height:1.7; }
+        .page-konten li { display: list-item !important; margin:0.3rem 0; line-height:1.7; overflow:visible; }
         /* Sembunyikan li kosong */
         .page-konten li:empty { display: none !important; }
         .page-konten li > br:only-child { display: none; }
 
         .page-konten a  { color:#4f46e5; text-decoration:underline; }
-        .page-konten img { max-width:100%; border-radius:0.5rem; margin:1rem 0; }
+        .page-konten img { max-width:100%; border-radius:0.5rem; margin:1rem 0; display:block; }
+        /* Fix float image dari summernote */
+        .page-konten img[style*="float: left"],
+        .page-konten img[style*="float:left"] { margin-right:1rem; margin-bottom:0.5rem; max-width:50%; }
+        .page-konten img[style*="float: right"],
+        .page-konten img[style*="float:right"] { margin-left:1rem; margin-bottom:0.5rem; max-width:50%; }
+        .page-konten p, .page-konten li, .page-konten h1, .page-konten h2, .page-konten h3 { overflow: visible; }
+        /* Clearfix setelah setiap elemen yang mengandung float */
+        .page-konten::after { content:''; display:table; clear:both; }
+        .page-konten p::after { content:''; display:table; clear:both; }
         .page-konten table { width:100%; border-collapse:collapse; margin:1rem 0; }
         .page-konten th, .page-konten td { border:1px solid #e5e7eb; padding:0.5rem 0.75rem; text-align:left; }
         .page-konten th { background:#f9fafb; font-weight:600; }
@@ -66,7 +75,7 @@
             </div>
             <!-- Isi konten -->
             <div class="max-w-4xl mx-auto px-4 py-10">
-                <div id="pageKonten" class="bg-white rounded-2xl shadow-lg p-8 page-konten text-gray-700"></div>
+                <div id="pageKonten" class="bg-white rounded-2xl shadow-lg p-8 page-konten text-gray-700 overflow-hidden"></div>
             </div>
         </div>
 
