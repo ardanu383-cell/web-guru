@@ -165,6 +165,12 @@
                     heroSection.style.backgroundSize = 'cover';
                     heroSection.style.backgroundPosition = 'center';
                     heroSection.classList.remove('gradient-hero');
+                } else {
+                    // Gradient — hapus background image jika ada
+                    heroSection.style.backgroundImage = '';
+                    heroSection.style.backgroundSize = '';
+                    heroSection.style.backgroundPosition = '';
+                    heroSection.classList.add('gradient-hero');
                 }
 
                 // Hero teks
