@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Siswa - GuruOnline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-xl hidden md:block">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold">G</span>
+                    </div>
+                    <span class="ml-2 text-xl font-bold">GuruOnline</span>
+                </div>
+            </div>
+            <nav class="mt-6">
+                <a href="#" class="sidebar-link active flex items-center px-6 py-3 text-gray-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Dashboard
+                </a>
+                <a href="#materi-section" class="sidebar-link flex items-center px-6 py-3 text-gray-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Materi
+                </a>
+                <a href="#kuis-section" class="sidebar-link flex items-center px-6 py-3 text-gray-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    Kuis
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Dashboard Siswa</h1>
+                    <p class="text-gray-500 text-sm">Kelas: <span id="kelasSiswa">-</span></p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userName" class="text-gray-700 font-medium"></span>
+                    <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
+                </div>
+            </header>
+
+            <div class="p-8">
+                <!-- Progress -->
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white mb-8">
+                    <h2 class="text-xl font-bold mb-2">Selamat Datang, <span id="welcomeName">Siswa</span>!</h2>
+                    <p class="opacity-90">Terus semangat belajar dan raih prestasi terbaikmu.</p>
+                </div>
+
+                <!-- Materi -->
+                <section id="materi-section" class="mb-12">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Materi Pembelajaran</h2>
+                    <div id="materiGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </section>
+
+                <!-- Kuis -->
+                <section id="kuis-section">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Kuis Tersedia</h2>
+                    <div id="kuisGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const user = checkAuth();
+        if (user && user.role !== 'siswa') window.location.href = 'dashboard-guru.html';
+        
+        document.getElementById('userName').textContent = user?.nama || '';
+        document.getElementById('welcomeName').textContent = user?.nama || 'Siswa';
+        document.getElementById('kelasSiswa').textContent = user?.kelas || '-';
+
+        async function loadMateri() {
+            try {
+                const materi = await api.get('/materi');
+                document.getElementById('materiGrid').innerHTML = materi.map(m => `
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover cursor-pointer" onclick="location.href='materi-detail.html?id=${m.id}'">
+                        <div class="h-32 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+                            <svg class="w-12 h-12 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">${m.mapel}</span>
+                                <span class="text-xs text-gray-500">${m.tipe}</span>
+                            </div>
+                            <h3 class="font-bold text-gray-900 mb-2 line-clamp-2">${m.judul}</h3>
+                            <p class="text-sm text-gray-600 line-clamp-2">${m.deskripsi || 'Tidak ada deskripsi'}</p>
+                            <div class="mt-4 flex items-center text-sm text-gray-500">
+                                <span>Oleh: ${m.guru_nama}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadKuis() {
+            try {
+                const kuis = await api.get('/kuis');
+                document.getElementById('kuisGrid').innerHTML = kuis.map(k => `
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">${k.judul}</h3>
+                                <p class="text-sm text-gray-600 mt-1">${k.deskripsi || ''}</p>
+                            </div>
+                            <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">${k.total_soal} Soal</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-sm text-gray-500">⏱️ ${k.waktu_menit} menit</span>
+                            <a href="kuis-page.html?id=${k.id}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition text-sm font-medium">
+                                Kerjakan
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        loadMateri();
+        loadKuis();
+    </script>
+</body>
+</html>

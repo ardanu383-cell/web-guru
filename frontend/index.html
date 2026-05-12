@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuruOnline - Platform Pembelajaran Modern</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/custom.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#7c3aed'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">G</span>
+                        </div>
+                        <span class="ml-2 text-xl font-bold text-gray-800">GuruOnline</span>
+                    </div>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="#beranda" class="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Beranda</a>
+                        <a href="#fitur" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Fitur</a>
+                        <a href="#materi" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Materi</a>
+                    </div>
+                </div>
+                <div class="flex items-center" id="auth-links">
+                    <a href="login.html" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                    <a href="register.html" class="ml-4 bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Daftar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="gradient-hero pt-32 pb-20 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
+                Belajar Jadi Lebih Mudah & Menyenangkan
+            </h1>
+            <p class="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
+                Platform pembelajaran digital untuk guru dan siswa. Akses materi, kerjakan kuis, dan tingkatkan prestasi belajar Anda.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="register.html?role=siswa" class="bg-white text-primary px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition shadow-lg">
+                    Mulai Belajar
+                </a>
+                <a href="register.html?role=guru" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-primary transition">
+                    Daftar sebagai Guru
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="py-12 bg-white -mt-10 mx-4 md:mx-20 rounded-2xl shadow-xl relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+                <div class="text-3xl font-bold text-primary">500+</div>
+                <div class="text-gray-600">Materi Pembelajaran</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-primary">50+</div>
+                <div class="text-gray-600">Guru Profesional</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-primary">10,000+</div>
+                <div class="text-gray-600">Siswa Aktif</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fitur -->
+    <section id="fitur" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Kenapa Memilih GuruOnline?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Platform lengkap dengan fitur modern untuk mendukung pembelajaran jarak jauh maupun tatap muka.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Materi Lengkap</h3>
+                    <p class="text-gray-600">Akses ratusan materi pembelajaran dalam bentuk video, dokumen, dan teks interaktif.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Kuis Interaktif</h3>
+                    <p class="text-gray-600">Uji pemahaman Anda dengan kuis online yang langsung menampilkan nilai dan pembahasan.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="w-14 h-14 bg-pink-100 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Progress Real-time</h3>
+                    <p class="text-gray-600">Pantau perkembangan belajar Anda dengan dashboard yang informatif dan mudah dipahami.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 px-4 bg-gray-900">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Siap Untuk Meningkatkan Prestasi?</h2>
+            <p class="text-gray-400 mb-10 text-lg">Bergabunglah dengan ribuan siswa dan guru yang telah menggunakan GuruOnline.</p>
+            <a href="register.html" class="inline-block bg-primary text-white px-10 py-4 rounded-xl font-semibold hover:bg-indigo-600 transition text-lg">
+                Daftar Gratis Sekarang
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-12 px-4">
+        <div class="max-w-7xl mx-auto text-center text-gray-600">
+            <p> GuruOnline. Platform Pembelajaran Digital.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

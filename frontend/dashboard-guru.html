@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Guru - GuruOnline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-xl hidden md:block">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold">G</span>
+                    </div>
+                    <span class="ml-2 text-xl font-bold">GuruOnline</span>
+                </div>
+            </div>
+            <nav class="mt-6">
+                <a href="#" onclick="showSection('dashboard')" class="sidebar-link active flex items-center px-6 py-3 text-gray-700" id="nav-dashboard">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    Dashboard
+                </a>
+                <a href="#" onclick="showSection('materi')" class="sidebar-link flex items-center px-6 py-3 text-gray-700" id="nav-materi">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Materi
+                </a>
+                <a href="#" onclick="showSection('kuis')" class="sidebar-link flex items-center px-6 py-3 text-gray-700" id="nav-kuis">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    Kuis
+                </a>
+                <a href="#" onclick="showSection('berita')" class="sidebar-link flex items-center px-6 py-3 text-gray-700" id="nav-berita">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    Berita
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-800">Dashboard Guru</h1>
+                <div class="flex items-center space-x-4">
+                    <span id="userName" class="text-gray-700 font-medium"></span>
+                    <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
+                </div>
+            </header>
+
+            <div class="p-8">
+                <!-- Section: Dashboard Overview -->
+                <div id="section-dashboard">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <div class="text-gray-500 text-sm font-medium">Total Materi</div>
+                            <div class="text-3xl font-bold text-indigo-600 mt-2" id="totalMateri">0</div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <div class="text-gray-500 text-sm font-medium">Total Kuis</div>
+                            <div class="text-3xl font-bold text-purple-600 mt-2" id="totalKuis">0</div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <div class="text-gray-500 text-sm font-medium">Total Berita</div>
+                            <div class="text-3xl font-bold text-green-600 mt-2" id="totalBerita">0</div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <div class="text-gray-500 text-sm font-medium">Siswa Mengikuti</div>
+                            <div class="text-3xl font-bold text-pink-600 mt-2">0</div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <p class="text-gray-500">Selamat datang di Dashboard Guru. Gunakan menu di sebelah kiri untuk mengelola Materi, Kuis, dan Berita.</p>
+                    </div>
+                </div>
+
+                <!-- Section: Materi -->
+                <div id="section-materi" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Kelola Materi</h2>
+                        <button onclick="openMateriModal()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Tambah Materi
+                        </button>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mapel</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kelas</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="materiList" class="divide-y divide-gray-200"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Kuis -->
+                <div id="section-kuis" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Kelola Kuis</h2>
+                        <button onclick="openKuisModal()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Buat Kuis
+                        </button>
+                    </div>
+                    <div id="kuisList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                </div>
+
+                <!-- Section: Berita -->
+                <div id="section-berita" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Kelola Berita</h2>
+                        <button onclick="openBeritaModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Tambah Berita
+                        </button>
+                    </div>
+                    <div id="beritaList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Tambah Materi -->
+    <div id="materiModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+            <h3 class="text-xl font-bold mb-4">Tambah Materi Baru</h3>
+            <form id="materiForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Judul Materi</label>
+                    <input type="text" id="mJudul" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
+                        <input type="text" id="mMapel" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kelas Target</label>
+                        <input type="text" id="mKelas" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Materi</label>
+                    <select id="mTipe" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <option value="teks">Teks</option>
+                        <option value="video">Video</option>
+                        <option value="dokumen">Dokumen</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                    <textarea id="mDeskripsi" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Konten</label>
+                    <textarea id="mKonten" rows="5" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">File (Opsional)</label>
+                    <input type="file" id="mFile" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeMateriModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Berita -->
+    <div id="beritaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+            <h3 class="text-xl font-bold mb-4">Tambah Berita Baru</h3>
+            <form id="beritaForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
+                    <input type="text" id="bJudul" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                    <select id="bKategori" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+                        <option value="umum">Umum</option>
+                        <option value="akademik">Akademik</option>
+                        <option value="kegiatan">Kegiatan</option>
+                        <option value="pengumuman">Pengumuman</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Isi Berita</label>
+                    <textarea id="bIsi" rows="6" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Thumbnail (Opsional)</label>
+                    <input type="file" id="bThumbnail" accept="image/*" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeBeritaModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const user = checkAuth();
+        if (user && user.role !== 'guru') window.location.href = 'dashboard-siswa.html';
+        document.getElementById('userName').textContent = user?.nama || '';
+
+        // ── Navigation ──────────────────────────────────────────────
+        const sections = ['dashboard', 'materi', 'kuis', 'berita'];
+
+        function showSection(name) {
+            sections.forEach(s => {
+                document.getElementById('section-' + s).classList.add('hidden');
+                document.getElementById('nav-' + s).classList.remove('active');
+            });
+            document.getElementById('section-' + name).classList.remove('hidden');
+            document.getElementById('nav-' + name).classList.add('active');
+
+            if (name === 'materi') loadMateri();
+            if (name === 'kuis') loadKuis();
+            if (name === 'berita') loadBerita();
+        }
+
+        // ── Materi ───────────────────────────────────────────────────
+        async function loadMateri() {
+            try {
+                const materi = await api.get('/materi');
+                document.getElementById('totalMateri').textContent = materi.length;
+                const tbody = document.getElementById('materiList');
+                tbody.innerHTML = materi.length === 0
+                    ? '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-400">Belum ada materi</td></tr>'
+                    : materi.map(m => `
+                        <tr>
+                            <td class="px-6 py-4 font-medium text-gray-900">${m.judul}</td>
+                            <td class="px-6 py-4 text-gray-600">${m.mapel}</td>
+                            <td class="px-6 py-4 text-gray-600">${m.kelas_target}</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs">${m.tipe}</span></td>
+                            <td class="px-6 py-4">
+                                <button onclick="deleteMateri(${m.id})" class="text-red-600 hover:text-red-800 text-sm">Hapus</button>
+                            </td>
+                        </tr>
+                    `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        function openMateriModal() { document.getElementById('materiModal').classList.remove('hidden'); }
+        function closeMateriModal() { document.getElementById('materiModal').classList.add('hidden'); }
+
+        document.getElementById('materiForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('judul', document.getElementById('mJudul').value);
+            formData.append('mapel', document.getElementById('mMapel').value);
+            formData.append('kelas_target', document.getElementById('mKelas').value);
+            formData.append('tipe', document.getElementById('mTipe').value);
+            formData.append('deskripsi', document.getElementById('mDeskripsi').value);
+            formData.append('konten', document.getElementById('mKonten').value);
+            const file = document.getElementById('mFile').files[0];
+            if (file) formData.append('file', file);
+            try {
+                await fetch(`/api/materi`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: formData
+                });
+                closeMateriModal();
+                loadMateri();
+                alert('Materi berhasil ditambahkan!');
+            } catch (e) { alert('Gagal menambahkan materi'); }
+        });
+
+        async function deleteMateri(id) {
+            if (!confirm('Yakin ingin menghapus materi ini?')) return;
+            try {
+                await api.delete(`/materi/${id}`);
+                loadMateri();
+            } catch (e) { alert('Gagal menghapus materi'); }
+        }
+
+        // ── Kuis ─────────────────────────────────────────────────────
+        async function loadKuis() {
+            try {
+                const kuis = await api.get('/kuis');
+                document.getElementById('totalKuis').textContent = kuis.length;
+                const list = document.getElementById('kuisList');
+                list.innerHTML = kuis.length === 0
+                    ? '<p class="text-gray-400 col-span-2 text-center py-8">Belum ada kuis</p>'
+                    : kuis.map(k => `
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <h3 class="font-bold text-lg mb-2">${k.judul}</h3>
+                            <p class="text-gray-600 text-sm mb-4">${k.deskripsi || 'Tidak ada deskripsi'}</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <span>${k.total_soal || 0} Soal</span>
+                                <span>${k.waktu_menit} Menit</span>
+                            </div>
+                        </div>
+                    `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        function openKuisModal() {
+            alert('Fitur tambah kuis dengan soal bisa dikembangkan lebih lanjut.');
+        }
+
+        // ── Berita ───────────────────────────────────────────────────
+        async function loadBerita() {
+            try {
+                const berita = await api.get('/berita');
+                document.getElementById('totalBerita').textContent = berita.length;
+                const list = document.getElementById('beritaList');
+                list.innerHTML = berita.length === 0
+                    ? '<p class="text-gray-400 col-span-3 text-center py-8">Belum ada berita</p>'
+                    : berita.map(b => `
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                            ${b.thumbnail_url ? `<img src="${b.thumbnail_url}" class="w-full h-40 object-cover">` : '<div class="w-full h-40 bg-gray-100 flex items-center justify-center text-gray-400">Tanpa Gambar</div>'}
+                            <div class="p-4">
+                                <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">${b.kategori}</span>
+                                <h3 class="font-bold text-gray-800 mt-2 mb-1">${b.judul}</h3>
+                                <p class="text-gray-500 text-sm line-clamp-2">${b.isi}</p>
+                                <div class="flex justify-between items-center mt-3 text-sm text-gray-400">
+                                    <span>${b.guru_nama}</span>
+                                    <button onclick="deleteBerita(${b.id})" class="text-red-500 hover:text-red-700">Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        function openBeritaModal() { document.getElementById('beritaModal').classList.remove('hidden'); }
+        function closeBeritaModal() { document.getElementById('beritaModal').classList.add('hidden'); }
+
+        document.getElementById('beritaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('judul', document.getElementById('bJudul').value);
+            formData.append('kategori', document.getElementById('bKategori').value);
+            formData.append('isi', document.getElementById('bIsi').value);
+            const thumbnail = document.getElementById('bThumbnail').files[0];
+            if (thumbnail) formData.append('thumbnail', thumbnail);
+            try {
+                await fetch(`/api/berita`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: formData
+                });
+                closeBeritaModal();
+                loadBerita();
+                alert('Berita berhasil ditambahkan!');
+            } catch (e) { alert('Gagal menambahkan berita'); }
+        });
+
+        async function deleteBerita(id) {
+            if (!confirm('Yakin ingin menghapus berita ini?')) return;
+            try {
+                await api.delete(`/berita/${id}`);
+                loadBerita();
+            } catch (e) { alert('Gagal menghapus berita'); }
+        }
+
+        // Load stats awal
+        loadMateri();
+        loadKuis();
+        loadBerita();
+    </script>
+</body>
+</html>
