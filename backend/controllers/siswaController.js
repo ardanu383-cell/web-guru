@@ -80,29 +80,34 @@ exports.importSiswa = async (req, res) => {
         const errors = [];
 
         for (const row of rows) {
-            const nama = row['nama'] || row['Nama'] || row['NAMA'];
-            const email = row['email'] || row['Email'] || row['EMAIL'];
-            const kelas = row['kelas'] || row['Kelas'] || row['KELAS'] || '';
-            const password = row['password'] || row['Password'] || String(row['nisn'] || row['NISN'] || 'siswa123');
+            const nama  = String(row['nama']  || row['Nama']  || row['NAMA']  || '').trim();
+            const email = String(row['email'] || row['Email'] || row['EMAIL'] || '').trim();
+            const kelas = String(row['kelas'] || row['Kelas'] || row['KELAS'] || '').trim();
+            const password = String(row['password'] || row['Password'] || row['PASSWORD'] || 'siswa123').trim();
 
             if (!nama || !email) {
                 gagal++;
-                errors.push(`Baris ${berhasil + gagal}: nama/email kosong`);
+                errors.push(`Baris ${berhasil + gagal}: kolom nama/email kosong`);
                 continue;
             }
 
             try {
                 const [existing] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
                 if (existing.length > 0) {
-                    gagal++;
-                    errors.push(`${email}: email sudah terdaftar`);
+                    // Update data jika sudah ada
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    await pool.query(
+                        "UPDATE users SET nama=?, kelas=?, password=?, password_plain=?, status='approved' WHERE email=?",
+                        [nama, kelas, hashedPassword, password, email]
+                    );
+                    berhasil++;
                     continue;
                 }
 
-                const hashedPassword = await bcrypt.hash(String(password), 10);
+                const hashedPassword = await bcrypt.hash(password, 10);
                 await pool.query(
-                    "INSERT INTO users (nama, email, password, role, kelas, status) VALUES (?, ?, ?, 'siswa', ?, 'approved')",
-                    [nama, email, hashedPassword, kelas]
+                    "INSERT INTO users (nama, email, password, password_plain, role, kelas, status) VALUES (?, ?, ?, ?, 'siswa', ?, 'approved')",
+                    [nama, email, hashedPassword, password, kelas]
                 );
                 berhasil++;
             } catch (e) {
@@ -111,9 +116,8 @@ exports.importSiswa = async (req, res) => {
             }
         }
 
-        // Hapus file temp
         const fs = require('fs');
-        fs.unlinkSync(req.file.path);
+        try { fs.unlinkSync(req.file.path); } catch(e) {}
 
         res.json({
             message: `Import selesai. Berhasil: ${berhasil}, Gagal: ${gagal}`,
@@ -128,29 +132,26 @@ exports.importSiswa = async (req, res) => {
 exports.exportSiswa = async (req, res) => {
     try {
         const [siswa] = await pool.query(
-            "SELECT nama, email, kelas, status, created_at FROM users WHERE role = 'siswa' ORDER BY kelas, nama"
+            "SELECT nama, email, kelas, password_plain, status, created_at FROM users WHERE role = 'siswa' ORDER BY kelas, nama"
         );
 
         const data = siswa.map(s => ({
-            'Nama': s.nama,
-            'Email': s.email,
-            'Kelas': s.kelas || '-',
-            'Status': s.status,
-            'Tanggal Daftar': new Date(s.created_at).toLocaleDateString('id-ID')
+            'nama': s.nama,
+            'email': s.email,
+            'kelas': s.kelas || '',
+            'password': s.password_plain || '(daftar mandiri)',
+            'status': s.status,
+            'tanggal_daftar': new Date(s.created_at).toLocaleDateString('id-ID')
         }));
 
         const workbook = XLSX.utils.book_new();
         const worksheet = XLSX.utils.json_to_sheet(data);
-
-        // Set lebar kolom
         worksheet['!cols'] = [
-            { wch: 30 }, { wch: 35 }, { wch: 15 }, { wch: 12 }, { wch: 20 }
+            { wch: 30 }, { wch: 35 }, { wch: 15 }, { wch: 20 }, { wch: 12 }, { wch: 18 }
         ];
-
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Siswa');
 
         const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
-
         res.setHeader('Content-Disposition', 'attachment; filename="data-siswa.xlsx"');
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.send(buffer);
@@ -164,16 +165,16 @@ exports.downloadTemplate = async (req, res) => {
     try {
         const template = [
             { nama: 'Contoh Siswa 1', email: 'siswa1@email.com', kelas: 'X-A', password: 'password123' },
-            { nama: 'Contoh Siswa 2', email: 'siswa2@email.com', kelas: 'X-B', password: 'password123' },
+            { nama: 'Contoh Siswa 2', email: 'siswa2@email.com', kelas: 'X-B', password: 'password456' },
+            { nama: 'Contoh Siswa 3', email: 'siswa3@email.com', kelas: 'XI-A', password: 'password789' },
         ];
 
         const workbook = XLSX.utils.book_new();
         const worksheet = XLSX.utils.json_to_sheet(template);
         worksheet['!cols'] = [{ wch: 30 }, { wch: 35 }, { wch: 15 }, { wch: 20 }];
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Template');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Template Import Siswa');
 
         const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
-
         res.setHeader('Content-Disposition', 'attachment; filename="template-import-siswa.xlsx"');
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.send(buffer);
