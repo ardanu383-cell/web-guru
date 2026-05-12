@@ -47,7 +47,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="beranda" class="gradient-hero pt-32 pb-20 px-4">
+    <section id="beranda" class="gradient-hero pt-32 pb-20 px-4" id="hero-section">
         <div class="max-w-7xl mx-auto text-center">
             <h1 id="hero-judul" class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
                 Belajar Jadi Lebih Mudah & Menyenangkan
@@ -69,17 +69,17 @@
     <!-- Stats -->
     <section class="py-12 bg-white -mt-10 mx-4 md:mx-20 rounded-2xl shadow-xl relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-                <div class="text-3xl font-bold text-primary">500+</div>
-                <div class="text-gray-600">Materi Pembelajaran</div>
+            <div id="stats1-block">
+                <div class="text-3xl font-bold text-primary" id="stats1-angka">500+</div>
+                <div class="text-gray-600" id="stats1-label">Materi Pembelajaran</div>
             </div>
-            <div>
-                <div class="text-3xl font-bold text-primary">50+</div>
-                <div class="text-gray-600">Guru Profesional</div>
+            <div id="stats2-block">
+                <div class="text-3xl font-bold text-primary" id="stats2-angka">50+</div>
+                <div class="text-gray-600" id="stats2-label">Guru Profesional</div>
             </div>
-            <div>
-                <div class="text-3xl font-bold text-primary">10,000+</div>
-                <div class="text-gray-600">Siswa Aktif</div>
+            <div id="stats3-block">
+                <div class="text-3xl font-bold text-primary" id="stats3-angka">10,000+</div>
+                <div class="text-gray-600" id="stats3-label">Siswa Aktif</div>
             </div>
         </div>
     </section>
@@ -165,7 +165,14 @@
                 const res = await fetch('/api/settings');
                 const s = await res.json();
 
-                // Hero
+                // Hero background
+                const heroSection = document.querySelector('#beranda');
+                if (s.hero_bg_type === 'image' && s.hero_bg_image) {
+                    heroSection.style.background = `url('${s.hero_bg_image}') center/cover no-repeat`;
+                    heroSection.style.backgroundBlendMode = 'overlay';
+                }
+
+                // Hero teks
                 document.getElementById('hero-judul').textContent = s.hero_judul;
                 document.getElementById('hero-subjudul').textContent = s.hero_subjudul;
 
@@ -178,6 +185,13 @@
                 t2.textContent = s.hero_tombol2_teks;
                 t2.href = s.hero_tombol2_link;
                 if (s.hero_tombol2_tampil === 'false') t2.classList.add('hidden');
+
+                // Stats
+                ['1','2','3'].forEach(n => {
+                    document.getElementById(`stats${n}-angka`).textContent = s[`stats${n}_angka`];
+                    document.getElementById(`stats${n}-label`).textContent = s[`stats${n}_label`];
+                    if (s[`stats${n}_tampil`] === 'false') document.getElementById(`stats${n}-block`).classList.add('hidden');
+                });
 
                 // Fitur
                 ['1','2','3'].forEach(n => {
@@ -192,10 +206,6 @@
                 document.getElementById('cta-tombol').textContent = s.cta_tombol_teks;
                 if (s.cta_tampil === 'false') document.getElementById('cta-section').classList.add('hidden');
 
-                // Nama website
-                if (s.nama_website) {
-                    document.querySelectorAll('.brand-name').forEach(el => el.textContent = s.nama_website);
-                }
             } catch(e) { console.log('Settings load failed, using defaults'); }
         }
         loadSettings();

@@ -22,6 +22,12 @@ app.use('/api/berita', require('./routes/berita'));
 app.use('/api/siswa', require('./routes/siswa'));
 app.use('/api/settings', require('./routes/settings'));
 
+// Upload background hero
+app.post('/api/settings/upload-bg', auth, upload.single('file'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ message: 'Tidak ada file.' });
+    res.json({ url: `/uploads/${req.file.filename}` });
+});
+
 // Upload gambar untuk Summernote
 const upload = require('./middleware/upload');
 const { auth } = require('./middleware/auth');
