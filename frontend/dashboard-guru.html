@@ -17,6 +17,8 @@
         .note-modal-backdrop { z-index: 9998 !important; }
         .note-popover { z-index: 9997 !important; }
         .note-editor .note-toolbar { z-index: 1; }
+        /* Sembunyikan overlay modal berita saat summernote dialog aktif */
+        .note-modal-open #beritaOverlay { display: none !important; }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -212,8 +214,10 @@
     </div>
 
     <!-- Modal Tambah Berita -->
-    <div id="beritaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[95vh] overflow-y-auto p-6">
+    <div id="beritaModal" class="fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <!-- Overlay terpisah agar bisa disembunyikan -->
+        <div id="beritaOverlay" class="fixed inset-0 bg-black bg-opacity-50" onclick="closeBeritaModal()"></div>
+        <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[95vh] overflow-y-auto p-6 relative z-10">
             <h3 class="text-xl font-bold mb-4">Tambah Berita Baru</h3>
             <form id="beritaForm" class="space-y-4">
                 <div>
@@ -476,6 +480,14 @@
                                     })
                                     .catch(() => alert('Gagal upload gambar'));
                                 });
+                            },
+                            onDialogShown: function() {
+                                // Sembunyikan overlay saat dialog summernote terbuka
+                                document.getElementById('beritaOverlay').style.display = 'none';
+                            },
+                            onDialogHidden: function() {
+                                // Tampilkan kembali overlay setelah dialog ditutup
+                                document.getElementById('beritaOverlay').style.display = '';
                             }
                         }
                     });
