@@ -7,6 +7,7 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role ENUM('guru','siswa') DEFAULT 'siswa',
+    status ENUM('pending','approved','rejected') DEFAULT 'pending',
     kelas VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
