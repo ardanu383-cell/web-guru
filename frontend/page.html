@@ -51,6 +51,14 @@
         .page-konten div[style*="text-align:right"]:has(> img:only-child) {
             float: right; margin: 0 0 0.5rem 1.5rem; width: auto;
         }
+        /* Kurangi jarak div wrapper gambar */
+        .page-konten div[style*="text-align"] { margin: 0; padding: 0; line-height: 0; }
+        .page-konten div[style*="text-align"] + div,
+        .page-konten div[style*="text-align"] + h1,
+        .page-konten div[style*="text-align"] + h2,
+        .page-konten div[style*="text-align"] + ol,
+        .page-konten div[style*="text-align"] + ul,
+        .page-konten div[style*="text-align"] + p { margin-top: 0; }
         .page-konten table { width:100%; border-collapse:collapse; margin:1rem 0; }
         .page-konten th, .page-konten td { border:1px solid #e5e7eb; padding:0.5rem 0.75rem; text-align:left; }
         .page-konten th { background:#f9fafb; font-weight:600; }
@@ -120,16 +128,14 @@
                 const page = await res.json();
                 document.title = `${page.judul} - GuruOnline`;
                 document.getElementById('pageJudul').textContent = page.judul;
-                // Proses konten: jadikan gambar float jika ada di div dengan text-align
+                // Proses konten: hapus div wrapper kosong dan kurangi jarak
                 let konten = page.konten;
-                // Wrap gambar yang ada di div center/left/right agar bisa float
+                // Hapus br kosong di dalam div
+                konten = konten.replace(/<div([^>]*)>\s*<br\s*\/?>\s*<\/div>/gi, '');
+                // Kurangi line-height pada div wrapper gambar
                 konten = konten.replace(
-                    /<div([^>]*style="[^"]*text-align:\s*(left|right)[^"]*"[^>]*)>\s*(<img[^>]*style="([^"]*)"[^>]*>)\s*<\/div>/gi,
-                    function(match, divAttr, align, imgTag, imgStyle) {
-                        const floatDir = align === 'right' ? 'right' : 'left';
-                        const margin = floatDir === 'left' ? '0 1.5rem 0.5rem 0' : '0 0 0.5rem 1.5rem';
-                        return imgTag.replace(/style="([^"]*)"/, `style="$1; float:${floatDir}; margin:${margin}"`);
-                    }
+                    /(<div[^>]*style="[^"]*text-align[^"]*"[^>]*>)(\s*<img)/gi,
+                    (m, div, img) => div.replace(/line-height:[^;"]*/gi, 'line-height:0') + img
                 );
                 document.getElementById('pageKonten').innerHTML = konten + '<div style="clear:both"></div>';
                 document.getElementById('loadingState').classList.add('hidden');
