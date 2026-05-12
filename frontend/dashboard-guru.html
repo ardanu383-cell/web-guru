@@ -448,7 +448,29 @@
                             ['table', ['table']],
                             ['insert', ['link', 'picture', 'hr']],
                             ['view', ['fullscreen', 'codeview']]
-                        ]
+                        ],
+                        callbacks: {
+                            onImageUpload: function(files) {
+                                Array.from(files).forEach(file => {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    fetch('/api/upload/image', {
+                                        method: 'POST',
+                                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                                        body: formData
+                                    })
+                                    .then(r => r.json())
+                                    .then(data => {
+                                        if (data.url) {
+                                            $('#bIsi').summernote('insertImage', data.url);
+                                        } else {
+                                            alert('Gagal upload gambar');
+                                        }
+                                    })
+                                    .catch(() => alert('Gagal upload gambar'));
+                                });
+                            }
+                        }
                     });
                 }
             }, 100);

@@ -20,6 +20,14 @@ app.use('/api/kuis', require('./routes/kuis'));
 app.use('/api/nilai', require('./routes/nilai'));
 app.use('/api/berita', require('./routes/berita'));
 
+// Upload gambar untuk Summernote
+const upload = require('./middleware/upload');
+const { auth } = require('./middleware/auth');
+app.post('/api/upload/image', auth, upload.single('file'), (req, res) => {
+    if (!req.file) return res.status(400).json({ message: 'Tidak ada file.' });
+    res.json({ url: `/uploads/${req.file.filename}` });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'Server berjalan dengan baik!' });
