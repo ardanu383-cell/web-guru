@@ -21,8 +21,10 @@ const uploadTemp = multer({
 
 router.get('/', auth, guruOnly, siswaController.getAllSiswa);
 router.get('/pending', auth, guruOnly, siswaController.getPendingSiswa);
+router.post('/tambah', auth, guruOnly, siswaController.tambahSiswa);
 router.put('/:id/approve', auth, guruOnly, siswaController.approveSiswa);
 router.put('/:id/reject', auth, guruOnly, siswaController.rejectSiswa);
+router.put('/:id', auth, guruOnly, siswaController.updateSiswa);
 router.delete('/:id', auth, guruOnly, siswaController.deleteSiswa);
 router.post('/import', auth, guruOnly, uploadTemp.single('file'), siswaController.importSiswa);
 router.get('/export', auth, guruOnly, siswaController.exportSiswa);

@@ -163,7 +163,11 @@
                             class="px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50">
                             Semua Siswa
                         </button>
-                        <div class="ml-auto flex gap-2">
+                        <div class="ml-auto flex gap-2 flex-wrap">
+                            <button onclick="openTambahSiswaModal()"
+                                class="px-4 py-2 rounded-lg bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 flex items-center gap-1">
+                                ✏️ Tambah Manual
+                            </button>
                             <a onclick="downloadTemplate()" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 flex items-center gap-1">
                                 📥 Template Excel
                             </a>
@@ -444,6 +448,76 @@
                 </div>
                 <div class="flex justify-end space-x-3 pt-4">
                     <button type="button" onclick="document.getElementById('editBeritaModal').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Siswa Manual -->
+    <div id="tambahSiswaModal" class="fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black bg-opacity-50" onclick="document.getElementById('tambahSiswaModal').classList.add('hidden')"></div>
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 relative z-10">
+            <h3 class="text-xl font-bold mb-4">Tambah Siswa Manual</h3>
+            <form id="tambahSiswaForm" class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                    <input type="text" id="tsNama" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Nama siswa">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" id="tsEmail" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none" placeholder="email@siswa.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+                    <input type="text" id="tsKelas" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Contoh: X-A">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input type="text" id="tsPassword" required minlength="6" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 outline-none font-mono" placeholder="Minimal 6 karakter">
+                    <button type="button" onclick="document.getElementById('tsPassword').value = generatePasswordAcak()" class="mt-1 text-xs text-orange-600 hover:underline">⚡ Generate password acak</button>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('tambahSiswaModal').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+                    <button type="submit" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Edit Siswa -->
+    <div id="editSiswaModal" class="fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black bg-opacity-50" onclick="document.getElementById('editSiswaModal').classList.add('hidden')"></div>
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 relative z-10">
+            <h3 class="text-xl font-bold mb-4">Edit Data Siswa</h3>
+            <form id="editSiswaForm" class="space-y-3">
+                <input type="hidden" id="esSiswaId">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                    <input type="text" id="esNama" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" id="esEmail" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+                    <input type="text" id="esKelas" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru <span class="text-gray-400 font-normal">(kosongkan jika tidak diubah)</span></label>
+                    <input type="text" id="esPassword" minlength="6" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-mono" placeholder="Isi jika ingin ganti password">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select id="esStatus" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('editSiswaModal').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
                     <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan Perubahan</button>
                 </div>
             </form>
@@ -906,6 +980,7 @@
                             <td class="px-6 py-4"><span class="px-2 py-1 rounded-full text-xs ${statusBadge[s.status]}">${s.status}</span></td>
                             <td class="px-6 py-4 flex gap-2">
                                 ${s.status !== 'approved' ? `<button onclick="approveSiswa(${s.id})" class="px-3 py-1 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">Setujui</button>` : ''}
+                                <button onclick="openEditSiswa(${s.id},'${s.nama}','${s.email}','${s.kelas||''}','${s.status}')" class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg text-sm hover:bg-blue-200">Edit</button>
                                 <button onclick="deleteSiswa(${s.id})" class="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm hover:bg-red-200">Hapus</button>
                             </td>
                         </tr>`).join('');
@@ -942,7 +1017,80 @@
             } catch (e) { alert('Gagal menolak siswa'); }
         }
 
-        async function deleteSiswa(id) {
+        function generatePasswordAcak() {
+            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let pass = '';
+            for (let i = 0; i < 8; i++) pass += chars[Math.floor(Math.random() * chars.length)];
+            return pass;
+        }
+
+        function openTambahSiswaModal() {
+            document.getElementById('tambahSiswaForm').reset();
+            document.getElementById('tambahSiswaModal').classList.remove('hidden');
+        }
+
+        document.getElementById('tambahSiswaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('tsPassword').value;
+            try {
+                await fetch('/api/siswa/tambah', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        nama: document.getElementById('tsNama').value,
+                        email: document.getElementById('tsEmail').value,
+                        kelas: document.getElementById('tsKelas').value,
+                        password
+                    })
+                }).then(r => r.json()).then(d => {
+                    if (d.message && !d.id && d.message.includes('gagal')) throw new Error(d.message);
+                    document.getElementById('tambahSiswaModal').classList.add('hidden');
+                    switchSiswaTab('semua');
+                    alert('Siswa berhasil ditambahkan!');
+                });
+            } catch (e) { alert(e.message || 'Gagal menambahkan siswa'); }
+        });
+
+        function openEditSiswa(id, nama, email, kelas, status) {
+            document.getElementById('esSiswaId').value = id;
+            document.getElementById('esNama').value = nama;
+            document.getElementById('esEmail').value = email;
+            document.getElementById('esKelas').value = kelas;
+            document.getElementById('esStatus').value = status;
+            document.getElementById('esPassword').value = '';
+            document.getElementById('editSiswaModal').classList.remove('hidden');
+        }
+
+        document.getElementById('editSiswaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('esSiswaId').value;
+            const body = {
+                nama: document.getElementById('esNama').value,
+                email: document.getElementById('esEmail').value,
+                kelas: document.getElementById('esKelas').value,
+                status: document.getElementById('esStatus').value,
+            };
+            const pass = document.getElementById('esPassword').value;
+            if (pass) body.password = pass;
+            try {
+                const res = await fetch(`/api/siswa/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify(body)
+                });
+                const d = await res.json();
+                if (!res.ok) throw new Error(d.message);
+                document.getElementById('editSiswaModal').classList.add('hidden');
+                loadSemuaSiswa();
+                alert('Data siswa berhasil diperbarui!');
+            } catch (e) { alert(e.message || 'Gagal memperbarui siswa'); }
+        });
             if (!confirm('Yakin ingin menghapus siswa ini? Data tidak bisa dikembalikan.')) return;
             try {
                 await api.delete(`/siswa/${id}`);

@@ -52,6 +52,51 @@ exports.rejectSiswa = async (req, res) => {
     }
 };
 
+// ── Tambah siswa manual ───────────────────────────────────────────
+exports.tambahSiswa = async (req, res) => {
+    try {
+        const { nama, email, kelas, password } = req.body;
+        if (!nama || !email || !password) {
+            return res.status(400).json({ message: 'Nama, email, dan password wajib diisi.' });
+        }
+        const [existing] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
+        if (existing.length > 0) {
+            return res.status(400).json({ message: 'Email sudah terdaftar.' });
+        }
+        const hashed = await bcrypt.hash(String(password), 10);
+        const [result] = await pool.query(
+            "INSERT INTO users (nama, email, password, password_plain, role, kelas, status) VALUES (?, ?, ?, ?, 'siswa', ?, 'approved')",
+            [nama, email, hashed, String(password), kelas || null]
+        );
+        res.status(201).json({ message: 'Siswa berhasil ditambahkan.', id: result.insertId });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// ── Update data siswa ─────────────────────────────────────────────
+exports.updateSiswa = async (req, res) => {
+    try {
+        const { nama, email, kelas, status, password } = req.body;
+        let query = 'UPDATE users SET nama=?, email=?, kelas=?, status=?';
+        const params = [nama, email, kelas || null, status];
+
+        if (password && password.length >= 6) {
+            const hashed = await bcrypt.hash(String(password), 10);
+            query += ', password=?, password_plain=?';
+            params.push(hashed, String(password));
+        }
+
+        query += " WHERE id=? AND role='siswa'";
+        params.push(req.params.id);
+
+        await pool.query(query, params);
+        res.json({ message: 'Data siswa berhasil diperbarui.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // ── Hapus siswa ───────────────────────────────────────────────────
 exports.deleteSiswa = async (req, res) => {
     try {
