@@ -19,6 +19,7 @@ app.use('/api/materi', require('./routes/materi'));
 app.use('/api/kuis', require('./routes/kuis'));
 app.use('/api/nilai', require('./routes/nilai'));
 app.use('/api/berita', require('./routes/berita'));
+app.use('/api/siswa', require('./routes/siswa'));
 
 // Upload gambar untuk Summernote
 const upload = require('./middleware/upload');
