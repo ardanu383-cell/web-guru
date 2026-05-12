@@ -1091,6 +1091,8 @@
                 alert('Data siswa berhasil diperbarui!');
             } catch (e) { alert(e.message || 'Gagal memperbarui siswa'); }
         });
+
+        async function deleteSiswa(id) {
             if (!confirm('Yakin ingin menghapus siswa ini? Data tidak bisa dikembalikan.')) return;
             try {
                 await api.delete(`/siswa/${id}`);
