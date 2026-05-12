@@ -989,6 +989,10 @@
                         document.getElementById('bg-preview-img').src = s.hero_bg_image;
                         document.getElementById('hero_bg_image_val').value = s.hero_bg_image;
                     }
+                } else {
+                    // Gradient — sembunyikan section gambar dan kosongkan value
+                    document.getElementById('bg-image-section').classList.add('hidden');
+                    document.getElementById('hero_bg_image_val').value = '';
                 }
                 // Tampilkan preview logo jika ada
                 if (s.logo_url) {
@@ -1002,7 +1006,12 @@
         // Toggle bg image section
         document.querySelectorAll('[name="hero_bg_type"]').forEach(r => {
             r.addEventListener('change', function() {
-                document.getElementById('bg-image-section').classList.toggle('hidden', this.value !== 'image');
+                const isImage = this.value === 'image';
+                document.getElementById('bg-image-section').classList.toggle('hidden', !isImage);
+                // Jika pilih gradient, kosongkan hero_bg_image agar tidak ikut tersimpan
+                if (!isImage) {
+                    document.getElementById('hero_bg_image_val').value = '';
+                }
             });
         });
 
