@@ -104,7 +104,7 @@
                         </div>
                         <div class="bg-white rounded-xl shadow-md p-6">
                             <div class="text-gray-500 text-sm font-medium">Siswa Mengikuti</div>
-                            <div class="text-3xl font-bold text-pink-600 mt-2">0</div>
+                            <div class="text-3xl font-bold text-pink-600 mt-2" id="totalSiswa">0</div>
                         </div>
                     </div>
                     <div class="bg-white rounded-xl shadow-md p-6">
@@ -1245,6 +1245,11 @@
         loadMateri();
         loadKuis();
         loadBerita();
+        // Load jumlah siswa approved
+        api.get('/siswa').then(siswa => {
+            const approved = siswa.filter(s => s.status === 'approved').length;
+            document.getElementById('totalSiswa').textContent = approved;
+        }).catch(() => {});
         // Load pending badge di sidebar
         api.get('/siswa/pending').then(pending => {
             const badge = document.getElementById('pendingBadge');
