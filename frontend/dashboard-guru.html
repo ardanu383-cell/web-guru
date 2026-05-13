@@ -72,10 +72,6 @@
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     Pengaturan
                 </a>
-                <a href="#" onclick="showSection('menu')" class="sidebar-link flex items-center px-6 py-3 text-gray-700" id="nav-menu">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
-                    Menu & Halaman
-                </a>
             </nav>
         </aside>
 
@@ -247,64 +243,62 @@
                 </div>
 
                 <!-- Section: Menu & Halaman -->
-                <div id="section-menu" class="hidden">
-                    <div class="flex gap-3 mb-6 border-b pb-3">
-                        <button onclick="switchMenuTab('menu')" id="mtab-menu" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium">🗂 Kelola Menu</button>
-                        <button onclick="switchMenuTab('halaman')" id="mtab-halaman" class="px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50">📄 Kelola Halaman</button>
-                    </div>
-
-                    <!-- Tab Menu -->
-                    <div id="mtab-menu-content">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold text-gray-800">Kelola Menu Navbar</h2>
-                            <button onclick="openMenuModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">+ Tambah Menu</button>
-                        </div>
-                        <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                            <table class="w-full">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase w-12">↕</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Label</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Link/Halaman</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="menuList" class="divide-y divide-gray-200"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Tab Halaman -->
-                    <div id="mtab-halaman-content" class="hidden">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold text-gray-800">Kelola Halaman</h2>
-                            <button onclick="openPageModal()" class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700">+ Tambah Halaman</button>
-                        </div>
-                        <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                            <table class="w-full">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="pageList" class="divide-y divide-gray-200"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Section: Pengaturan -->
                 <div id="section-pengaturan" class="hidden">
                     <!-- Tab navigasi -->
-                    <div class="flex gap-3 mb-6 border-b pb-3">
+                    <div class="flex gap-3 mb-6 border-b pb-3 flex-wrap">
                         <button onclick="switchPengaturanTab('akun')" id="ptab-akun" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium">👤 Akun</button>
                         <button onclick="switchPengaturanTab('website')" id="ptab-website" class="px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50">🌐 Tampilan Website</button>
+                        <button onclick="switchPengaturanTab('menu')" id="ptab-menu" class="px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50">🗂 Menu & Halaman</button>
+                    </div>
+
+                    <!-- Tab Menu & Halaman (dipindah dari section terpisah) -->
+                    <div id="ptab-menu-content" class="hidden">
+                        <div class="flex gap-3 mb-4">
+                            <button onclick="switchMenuTab('menu')" id="mtab-menu" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium">🗂 Kelola Menu</button>
+                            <button onclick="switchMenuTab('halaman')" id="mtab-halaman" class="px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50">📄 Kelola Halaman</button>
+                        </div>
+                        <div id="mtab-menu-content">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-gray-800">Kelola Menu Navbar</h2>
+                                <button onclick="openMenuModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">+ Tambah Menu</button>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase w-12">↕</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Label</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Link/Halaman</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="menuList" class="divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="mtab-halaman-content" class="hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-gray-800">Kelola Halaman</h2>
+                                <button onclick="openPageModal()" class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700">+ Tambah Halaman</button>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pageList" class="divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Tab Akun -->
@@ -919,7 +913,7 @@
         }
 
         // ── Navigation ──────────────────────────────────────────────
-        const sections = ['dashboard', 'materi', 'kuis', 'berita', 'siswa', 'pengaturan', 'menu'];
+        const sections = ['dashboard', 'materi', 'kuis', 'berita', 'siswa', 'pengaturan'];
 
         function showSection(name) {
             sections.forEach(s => {
@@ -940,7 +934,6 @@
             if (name === 'berita') loadBerita();
             if (name === 'siswa') loadSiswa();
             if (name === 'pengaturan') loadProfilAdmin();
-            if (name === 'menu') loadMenuSection();
         }
 
         function loadProfilAdmin() {
@@ -954,13 +947,14 @@
         function switchPengaturanTab(tab) {
             document.getElementById('ptab-akun-content').classList.toggle('hidden', tab !== 'akun');
             document.getElementById('ptab-website-content').classList.toggle('hidden', tab !== 'website');
-            document.getElementById('ptab-akun').className = tab === 'akun'
-                ? 'px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium'
-                : 'px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50';
-            document.getElementById('ptab-website').className = tab === 'website'
-                ? 'px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium'
-                : 'px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50';
+            document.getElementById('ptab-menu-content').classList.toggle('hidden', tab !== 'menu');
+            ['akun','website','menu'].forEach(t => {
+                document.getElementById(`ptab-${t}`).className = tab === t
+                    ? 'px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium'
+                    : 'px-4 py-2 rounded-lg bg-white border text-gray-600 text-sm font-medium hover:bg-gray-50';
+            });
             if (tab === 'website') loadWebsiteSettings();
+            if (tab === 'menu') loadMenuSection();
         }
 
         async function loadWebsiteSettings() {
