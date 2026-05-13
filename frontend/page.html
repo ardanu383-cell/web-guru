@@ -40,18 +40,21 @@
         .page-konten div:has(> img:only-child) { margin-bottom: 0.5rem; line-height: 0; }
         .page-konten div[style*="text-align: left"]:has(> img:only-child),
         .page-konten div[style*="text-align:left"]:has(> img:only-child) {
-            float: left; margin: 0 1.5rem 0.5rem 0; width: auto;
+            float: left; margin: 0 1.5rem 0.5rem 0; width: auto; max-width: 45%;
         }
         .page-konten div[style*="text-align: right"]:has(> img:only-child),
         .page-konten div[style*="text-align:right"]:has(> img:only-child) {
-            float: right; margin: 0 0 0.5rem 1.5rem; width: auto;
+            float: right; margin: 0 0 0.5rem 1.5rem; width: auto; max-width: 45%;
         }
-        /* Div yang berisi TEKS — pastikan normal */
+        /* Gambar di dalam div float — ikuti lebar parent */
+        .page-konten div:has(> img:only-child) img { max-width: 100% !important; width: 100% !important; height: auto; }
+        /* Div yang berisi TEKS — pastikan normal dan tidak overflow */
         .page-konten div:not(:has(> img:only-child)) {
             line-height: 1.8;
             word-wrap: break-word;
             overflow-wrap: break-word;
             white-space: normal;
+            min-width: 0;
         }
         /* Clearfix */
         .page-konten { overflow: auto; }
@@ -125,14 +128,19 @@
                 const page = await res.json();
                 document.title = `${page.judul} - GuruOnline`;
                 document.getElementById('pageJudul').textContent = page.judul;
-                // Proses konten: hapus div wrapper kosong dan kurangi jarak
+                // Proses konten
                 let konten = page.konten;
                 // Hapus br kosong di dalam div
                 konten = konten.replace(/<div([^>]*)>\s*<br\s*\/?>\s*<\/div>/gi, '');
-                // Kurangi line-height pada div wrapper gambar
+                // Fix gambar dengan width% — batasi max 45% untuk float
                 konten = konten.replace(
-                    /(<div[^>]*style="[^"]*text-align[^"]*"[^>]*>)(\s*<img)/gi,
-                    (m, div, img) => div.replace(/line-height:[^;"]*/gi, 'line-height:0') + img
+                    /(<img[^>]*style="[^"]*width:\s*)(\d+)(%[^"]*")/gi,
+                    (match, pre, num, post) => {
+                        const w = parseInt(num);
+                        // Jika gambar terlalu besar (>50%), biarkan full width
+                        if (w > 50) return `${pre}100${post}`;
+                        return match;
+                    }
                 );
                 document.getElementById('pageKonten').innerHTML = konten + '<div style="clear:both"></div>';
                 document.getElementById('loadingState').classList.add('hidden');
