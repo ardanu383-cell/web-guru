@@ -29,6 +29,10 @@
         /* Hapus jarak kanan di editor */
         .note-editor .note-editing-area { padding: 0 !important; }
         .note-editable[contenteditable] { padding: 10px 10px 10px 10px !important; box-sizing: border-box; }
+        /* Batasi lebar gambar di editor agar tidak terlalu besar */
+        .note-editable img { max-width: 45% !important; height: auto; }
+        .note-editable img[style*="float: none"],
+        .note-editable img[style*="float:none"] { max-width: 100% !important; }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -862,7 +866,7 @@
     <!-- Modal Tambah/Edit Halaman -->
     <div id="pageModal" class="fixed inset-0 hidden z-50 flex items-center justify-center p-4">
         <div class="fixed inset-0 bg-black bg-opacity-50" onclick="document.getElementById('pageModal').classList.add('hidden')"></div>
-        <div class="bg-white rounded-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto p-6 relative z-10">
+        <div class="bg-white rounded-2xl w-full max-w-5xl max-h-[95vh] overflow-y-auto p-6 relative z-10">
             <h3 id="pageModalTitle" class="text-xl font-bold mb-4">Tambah Halaman</h3>
             <form id="pageForm" class="space-y-4">
                 <input type="hidden" id="pageId">
