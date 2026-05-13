@@ -20,12 +20,15 @@
         /* Sembunyikan overlay modal berita saat summernote dialog aktif */
         .note-modal-open #beritaOverlay { display: none !important; }
         /* Pastikan area edit summernote bisa menerima semua keyboard input */
-        .note-editable { outline: none; }
+        .note-editable { outline: none; padding: 10px !important; }
         .note-editable * { pointer-events: auto; }
         /* Fix list di dalam editor summernote */
         .note-editable ul { list-style-type: disc !important; padding-left: 2em !important; }
         .note-editable ol { list-style-type: decimal !important; padding-left: 2em !important; }
         .note-editable li { display: list-item !important; }
+        /* Hapus jarak kanan di editor */
+        .note-editor .note-editing-area { padding: 0 !important; }
+        .note-editable[contenteditable] { padding: 10px 10px 10px 10px !important; box-sizing: border-box; }
     </style>
 </head>
 <body class="bg-gray-100">
